@@ -4,6 +4,8 @@
  */
 package taxcalculatorapp;
 
+import java.io.IOException;
+
 /**
  *
  * @author STUDENT
@@ -13,18 +15,13 @@ public class TaxCalculatorApp {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
         
-        Tax paiLimit = new Tax();
-        
-        paiLimit.getWeeklyPayLimit();
-        
-        System.out.println(paiLimit.getWeeklyPayLimit());
-        System.out.println(paiLimit.getWeeklyTaxCreditsYear());
-     //  paiLimit.setWeeklyPayLimit(0);
-     
-        System.out.println("TESTING");
+       SinglePerson Tax = new SinglePerson();
+       //Tax.SinglePersonTax();
+       
+        System.out.println(Tax.getWeeklyTaxCredits());
 
      
     }

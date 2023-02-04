@@ -5,47 +5,33 @@ package taxcalculatorapp;
 public class Tax {
     
     private double rateBand1;
-    private int yearlyTaxCredits;
-    private int weeklyTaxCreditsYear; 
-    private int fortnightlyTaxCreditsYear;
-    private int monthlyTaxCreditsYear;
-    
-   
-    
-    
+    private int singlePersonTaxCredits;
+    private int marriedPersonTaxCredits;
     private double percentage;
     private int regularTaxPercentage;
     private int emergencyTaxPercentage;
     private double taxCreditsTwoEmployeers;
 
-    
     // default constructor (initialised)  
-            public Tax(){
+    public Tax(){
 
-                this.rateBand1 = 40000;
-                this.yearlyTaxCredits = 3500;
-                this.weeklyTaxCreditsYear = 52; 
-                this.fortnightlyTaxCreditsYear = 26;
-                this.monthlyTaxCreditsYear = 12;
-                
-                
-                
-                this.percentage = 100; 
-                this.regularTaxPercentage = 20;
-                this.emergencyTaxPercentage = 40;
-                this.taxCreditsTwoEmployeers = this.yearlyTaxCredits + 1775;                        
-            }
+        this.rateBand1 = 40000;
+        this.singlePersonTaxCredits = 3500;
+        this.marriedPersonTaxCredits = 5325;
+        this.percentage = 100; 
+        this.regularTaxPercentage = 20;
+        this.emergencyTaxPercentage = 40;                     
+    }
 
-  
-    
     
     /**
      * 
-     * @return weekly TAX CREDITS
+     * @return weekly Tax Credits
      */
-    public int getWeeklyTaxCreditsYear() {
-          
-        int weeklyTaxCrdits = this.yearlyTaxCredits / this.weeklyTaxCreditsYear;
+    public int getWeeklyTaxCredits() {
+        
+        int numberOfWeeks = 52;
+        int weeklyTaxCrdits = this.singlePersonTaxCredits / numberOfWeeks;
         
         return weeklyTaxCrdits;
     }
@@ -53,13 +39,14 @@ public class Tax {
     
     /**
      * 
-     * @return  weekly Pay Limit
+     * @return  Weekly Pay Limit
      */
     public double getWeeklyPayLimit() {
         
-        double weeklyPayLimit=0;
-       
-        weeklyPayLimit = this.rateBand1 / this.weeklyTaxCreditsYear;
+        // number of weeks throghout the year
+        int numberOfWeeks = 52;
+        
+        double weeklyPayLimit = this.rateBand1 / numberOfWeeks;
 
         // two decimal number formating    
         weeklyPayLimit = Math.round(weeklyPayLimit * 100);
@@ -67,17 +54,31 @@ public class Tax {
         
         return weeklyPayLimit;
     }
-
+    
+    
+    /**
+     * 
+     * @return Fortnightly Tax Credits
+     */
+    public int getFortnightlyTaxCredits() {
+        
+        int numberOfWeeks = 26;
+        int weeklyTaxCrdits = this.singlePersonTaxCredits / numberOfWeeks;
+        
+        return weeklyTaxCrdits;
+    }
+    
     
     /**
      * 
      * @return fortnightly Pay Limit
      */
-    public double getFortnighlyPayLimit() {
+    public double getFortnightlyPayLimit() {
         
-        double fortnightlyPayLimit=0;
-       
-        fortnightlyPayLimit = this.rateBand1 / this.weeklyTaxCreditsYear;
+        // number of fortnightly throghout the year
+        int numberOfWeeks = 26;       
+        
+        double fortnightlyPayLimit = this.rateBand1 / numberOfWeeks;
 
         // two decimal number formating    
         fortnightlyPayLimit = Math.round(fortnightlyPayLimit * 100);
@@ -87,15 +88,31 @@ public class Tax {
     }
 
     
-   /**
-    * 
-    * @return monthly Pay Limit
-    */
+    /**
+     * 
+     * @return monthly Tax Credits
+     */
+    public int getMonthlyTaxCredits() {
+        
+        int numberOfWeeks = 12;
+        int weeklyTaxCrdits = this.singlePersonTaxCredits / numberOfWeeks;
+
+        return weeklyTaxCrdits;
+    }
+    
+    
+    /**
+     * 
+     * @return Monthly Pay Limit
+     */
     public double getMonthlyPayLimit() {
+        
+        // number of throghout the year
+        int numberOfMonths = 12; 
         
         double monthlyPayLimit=0;
        
-        monthlyPayLimit = this.rateBand1 / this.weeklyTaxCreditsYear;
+        monthlyPayLimit = this.rateBand1 / numberOfMonths;
 
         // two decimal number formating    
         monthlyPayLimit = Math.round(monthlyPayLimit * 100);
@@ -106,77 +123,53 @@ public class Tax {
 
     
     /** 
-    * @param amount get user input
-    * Calculate the user input against Yearly Tax Credits
-    */
+     * @param amount get user input
+     * Calculate the user input against Yearly Tax Credits
+     */
     public void SinglePersonTaxCreditBalance(int amount){
 
-       if(this.yearlyTaxCredits < amount)
+       if(this.singlePersonTaxCredits < amount)
        {
            System.out.println("Invalid");
        }else{
-           this.yearlyTaxCredits = (this.yearlyTaxCredits - amount);
+           this.singlePersonTaxCredits = (this.singlePersonTaxCredits - amount);
            System.out.println(" ");
-           System.out.println("Remaining Tax Credits : " + this.yearlyTaxCredits);
+           System.out.println("Remaining Tax Credits : " + this.singlePersonTaxCredits);
        }
    }
-
     
     /**
      * @return the amount of (TAX Credits) left 
      */
-    public int getYearlyTaxCredits() {
-        return yearlyTaxCredits;
-    }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+    public int getSinglePersonTaxCredits() {
+        return singlePersonTaxCredits;
+    } 
     
-
-    public double getPercentage() {
-        return percentage;
-    }
-
-    public void setPercentage(double percentage) {
-        this.percentage = percentage;
-    }
-
-    public int getRegularTaxPercentage() {
-        return regularTaxPercentage;
-    }
-
-    public void setRegularTaxPercentage(int regularTaxPercentage) {
-        this.regularTaxPercentage = regularTaxPercentage;
-    }
-
-    public int getEmergencyTaxPercentage() {
-        return emergencyTaxPercentage;
-    }
-
-    public void setEmergencyTaxPercentage(int emergencyTaxPercentage) {
-        this.emergencyTaxPercentage = emergencyTaxPercentage;
-    }
-
-    public double getTaxCreditsTwoEmployeers() {
-        return taxCreditsTwoEmployeers;
-    }
-
-    public void setTaxCreditsTwoEmployeers(double taxCreditsTwoEmployeers) {
-        this.taxCreditsTwoEmployeers = taxCreditsTwoEmployeers;
-    }
-               
     
-            
-               
+    /** 
+     * @param amount get user input
+     * Calculate the user input against Yearly Tax Credits
+     */
+    public void MarriedPersonTaxCreditBalance(int amount){
+
+       if(this.marriedPersonTaxCredits < amount)
+       {
+           System.out.println("Invalid");
+       }else{
+           this.marriedPersonTaxCredits = (this.marriedPersonTaxCredits - amount);
+           System.out.println(" ");
+           System.out.println("Remaining Tax Credits : " + this.marriedPersonTaxCredits);
+       }
+   }
+    
+    
+    /**
+     * @return the amount of (TAX Credits) left 
+     */
+    public int getMarriedPersonTaxCredits() {
+        return marriedPersonTaxCredits;
+    } 
+
+    
+      
 }
