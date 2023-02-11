@@ -1,10 +1,6 @@
 
 package taxcalculatorapp;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
 
 /**
  *
@@ -46,10 +42,9 @@ public class UserMenu {
                         + "\n"
                         + userMenu);
 
-                   // calling method to get users INT and initializing the return type to zero
-                   int user = getUserInput.getUserInt(0);
+                    // calling method to get users INT and initializing the return type to zero
+                    int user = getUserInput.getUserInt(0);
                    
-
                     // user option switch 
                     switch(user){
                         case 1:
@@ -65,15 +60,12 @@ public class UserMenu {
 
                         default:// do nothing  
                }
-
         }
         
         else if (selectedOption == 2){
             
                  System.out.println("You MUST Finish the Single Person calculation first");
                  System.out.println("NOW FUCK OFF!!!");
-        
-        
         }
 
     }

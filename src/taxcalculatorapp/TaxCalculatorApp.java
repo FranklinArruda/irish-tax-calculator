@@ -12,14 +12,15 @@
                      * @param args the command line arguments
                      */
                     public static void main(String[] args) throws IOException {
-                        // TODO code application logic here
+                      
 
-                        UserMenu main = new UserMenu();
-                        main.MainMenu();
+                        //UserMenu main = new UserMenu();
+                        //main.MainMenu();
+                        
+                        SinglePerson single = new SinglePerson();
+                        single.SinglePersonTax();
+                  
                        
-
-
-
                     }
 
                 }

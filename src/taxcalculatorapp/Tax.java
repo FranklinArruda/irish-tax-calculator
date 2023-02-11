@@ -6,7 +6,6 @@
     import java.io.BufferedReader;
     import java.io.IOException;
     import java.io.InputStreamReader;
-    import java.util.Scanner;
 
     public class Tax {
 
@@ -191,14 +190,46 @@
         public int getMarriedPersonTaxCredits() {
             return marriedPersonTaxCredits;
         } 
+        
+        /**
+         * 
+         * @return gross deductions taxed at 20%
+         */
+        public double regularTaxDeduction(){
+            
+            // finding gross deductions (Gross pay * 20% / 100%)
+            int percentage = 100;                    
+            double regularTaxDeduction = getWeeklyPayLimit() * this.regularTax / percentage;
+            
+            // two decimal number formating    
+            regularTaxDeduction = Math.round(regularTaxDeduction * 100);
+            regularTaxDeduction = regularTaxDeduction/100;
+                               
+            return regularTaxDeduction;
+        }
+        
+        
+        /**
+         * 
+         * @return gross deductions taxed at 40%
+         */
+        public double emergencyTaxDeduction(){
+            
+            // finding gross deductions (Gross pay * 20% / 100%)
+            int percentage = 100;                    
+            double emergencyTaxDeduction = getWeeklyPayLimit() * this.emergencyTax / percentage;
+            
+            // two decimal number formating    
+            emergencyTaxDeduction = Math.round(emergencyTaxDeduction * 100);
+            emergencyTaxDeduction = emergencyTaxDeduction/100;
+                               
+            return emergencyTaxDeduction;
+        }
 
 
         /**
-        * Ask user to input an number within a range and return an integer value
         * If not valid, keep asking
         * @param prompt -- the message or question to the user
-        * @param minValue -- the lowest value allowed
-        * @param maxValue -- the highest value allowed
         * @return -- valid user input
         */
         public int getUserInt(int prompt){
@@ -229,47 +260,91 @@
                //userInput must be text now
                return (userInput);  
            }
+        
+        
+        /**
+        * If not valid, keep asking
+        * @return -- valid user input
+        */
+        public double getUserDouble(){
 
+            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
 
-            /**
-                 * Get some text from the user (via keyboard)
-                 * @param prompt -- the message or request to the user
-                 * @return - the users input as a String
-                 * If user does not enter text, output an error and ask them again
-                 */
-                public String getUserText (String prompt){
+            boolean valid = false;
+            double userInput=-1; //defaulted to -1 because it needs to have a value for validating
 
-                    BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+               do{     
+                   try {
+                       userInput = Double.parseDouble(myKeyboard.readLine());
 
-                    boolean valid=false;
-                    String userInput ="";
-
-                    //prompt user until input is valid
-                    do{  
-                       try {
-
-                        System.out.println(prompt); 
-                        userInput = myKeyboard.readLine().trim();
-                        
-                                                // space in case the user types two words   
-                         if(!userInput.matches("[a-zA-Z ]+")){
-                            System.out.println("Only Letters Allowed.Please try again!");  
-                            valid=false;
-                        }
-
-                         else{
-                            valid=true;
-                         }
-                       }catch(Exception e){
-                            // this will be if the parseInt threw an error -- so the user did not enter a number   
-                        System.out.println("Something went Wrong. Please try Again!");  
+                       //check that the value is allowed by checking range
+                       if (userInput <= 0){
+                           System.out.println("Invalid value entered. Please enter a number greater than ZERO");    
                        }
-                                              // space in case the user types two words                          
-                    }while (!userInput.matches("[a-zA-Z ]+"));
+                       else {
+                           //must be OK
+                           valid = true;
+                       }
+                   }catch(Exception e){
+                       // this will be if the parseInt threw an error -- so the user did not enter a number
+                       System.out.println("Only numbers.Please try again!");  
+                   }    
+               }while (!valid);
+             
 
-                    //userInput must be text now
-                    return (userInput);
+               //userInput must be text now
+               return userInput;  
+           }
+
+
+        /**
+         * Get some text from the user (via keyboard)
+         * @param prompt -- the message or request to the user
+         * @return - the users input as a String
+         * If user does not enter text, output an error and ask them again
+         */
+        public String getUserText (String prompt){
+
+            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+
+            boolean valid=false;
+            String userInput ="";
+
+            //prompt user until input is valid
+            do{  
+               try {
+
+                System.out.println(prompt); 
+                userInput = myKeyboard.readLine().trim();
+
+                 // space between letter 'Z' and square brackets ']' in case the user types two words   
+                 if(!userInput.matches("[a-zA-Z ]+")){
+                    System.out.println("Only Letters Allowed.Please try again!");  
+                    valid=false;
                 }
 
+                 else{
+                    valid=true;
+                 }
+               }catch(Exception e){
+                    // this will be if the parseInt threw an error -- so the user did not enter a number   
+                System.out.println("Something went Wrong. Please try Again!");  
+               }
+            // space between letter 'Z' and square brackets ']' in case the user types two words 
+            }while (!userInput.matches("[a-zA-Z ]+"));
+
+            //userInput must be text now
+            return (userInput);
+        }
+
+        
+        public double remaningBalanceGrossPay(){
+        
+        // 2) diference between gross pay & weekly gross pay limit = balance to be taxed at 40%
+        double  remainingBalance = 0.0;
+        System.out.println("REMAINING BALANCE = " + remainingBalance );
+            
+        return remainingBalance; 
+        } 
 
     }
