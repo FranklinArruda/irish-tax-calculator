@@ -48,8 +48,8 @@ public class UserMenu {
                     // user option switch 
                     switch(user){
                         case 1:
-                            System.out.println("Single");
-                            SinglePerson single = new SinglePerson();
+                           // System.out.println("Single");
+                            PersonStatus single = new PersonStatus();
                             single.SinglePersonTax();
                             break;
                             
@@ -65,7 +65,6 @@ public class UserMenu {
         else if (selectedOption == 2){
             
                  System.out.println("You MUST Finish the Single Person calculation first");
-                 System.out.println("NOW FUCK OFF!!!");
         }
 
     }

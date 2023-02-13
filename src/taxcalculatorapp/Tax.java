@@ -14,6 +14,7 @@
         private int marriedPersonTaxCredits;
         private int regularTax;
         private int emergencyTax;
+        private int PRSI_credits;
 
 
         // default constructor (initialised)  
@@ -23,18 +24,24 @@
             this.singlePersonTaxCredits = 3500;
             this.marriedPersonTaxCredits = 5325; //3500 + 1775 = Married person (5325)
             this.regularTax = 20;
-            this.emergencyTax = 40;                     
+            this.emergencyTax = 40; 
+            this.PRSI_credits = 12;
         }
 
+   
 
+
+        
+        
         /**
          * 
+         * @param weeklyTaxCrdits
          * @return weekly Tax Credits
          */
-        public int getWeeklyTaxCredits() {
+        public int getWeeklyTaxCredits(int weeklyTaxCrdits) {
 
             int numberOfWeeks = 52;
-            int weeklyTaxCrdits = this.singlePersonTaxCredits / numberOfWeeks;
+            weeklyTaxCrdits = weeklyTaxCrdits  / numberOfWeeks;
 
             return weeklyTaxCrdits;
         }                
@@ -61,15 +68,16 @@
 
         /**
          * 
+         * @param fortnightlyTaxCrdits
          * @return Fortnightly Tax Credits
          */
-        public int getFortnightlyTaxCredits() {
+        public int getFortnightlyTaxCredits(int fortnightlyTaxCrdits) {
 
             // number of fortnightly throghout the year
             int numberOfWeeks = 26;
-            int weeklyTaxCrdits = this.singlePersonTaxCredits / numberOfWeeks;
+            fortnightlyTaxCrdits = fortnightlyTaxCrdits / numberOfWeeks;
 
-            return weeklyTaxCrdits;
+            return fortnightlyTaxCrdits;
         }
 
 
@@ -94,12 +102,13 @@
 
         /**
          * 
+         * @param MonthlyTaxCredits
          * @return monthly Tax Credits
          */
-        public int getMonthlyTaxCredits() {
+        public int getMonthlyTaxCredits(int MonthlyTaxCredits) {
 
             int numberOfWeeks = 12;
-            int MonthlyTaxCredits = this.singlePersonTaxCredits / numberOfWeeks;
+            MonthlyTaxCredits = MonthlyTaxCredits / numberOfWeeks;
 
             return MonthlyTaxCredits;
         }
@@ -125,48 +134,83 @@
 
         
         /**
-         * @param companyName print out company name 
+         * @param companyName print out company name  
+         * @param amount  
+         * @return  amount
          * @throws IOException 
          * Get user input to set the Tax Credit validation 
          */
-        public void SinglePersonTaxCreditBalance(String companyName) throws IOException{
+        public int SinglePersonTaxCreditBalance(String companyName, int amount ) throws IOException{
 
-            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
-
-            int amount=0; //get user input
-            int remainingBalnce=0; // stores the remaining Tax Credits
-
+             int remainingBalnce = 0;
+             
              do{ 
                 try {
                     System.out.println("Enter Tax Credits for " + companyName );
                     amount = getUserInt(0); // call method get user input
 
                 }catch(Exception e){
+                    
                     // this will be if the parseInt threw an error -- so the user did not enter a number
                     System.out.println("Only numbers.Please try again!");  
                 }    
-
-                    if((this.singlePersonTaxCredits < amount)){
-                       System.out.println("Not enough Tax Credits");
+                        if( this.singlePersonTaxCredits >= amount ) {
+                            
+                            this.singlePersonTaxCredits -= amount;
+                            remainingBalnce = this.singlePersonTaxCredits; // stores the remaining Tax Credits
+                            
+                            System.out.println("Remaining Tax Credits : " + remainingBalnce + "\n");
+                            break; // will stop the loop if there is anough Tax Credits           
                    }
                     else{
-                       remainingBalnce = this.singlePersonTaxCredits = (this.singlePersonTaxCredits - amount);
-                       System.out.println(" ");
-                       System.out.println("Remaining Tax Credits : " + remainingBalnce + "\n");
-
-                       break; // will stop the loop if there is anough Tax Credits
-                   }
-             }while((amount>remainingBalnce)); 
-     }
-
+                            System.out.println("Not enough Tax Credits");
+                 }
+             }while((amount > remainingBalnce)); 
+             
+             return amount;
+        }
+        
+     
         /**
-         * @return the amount of (TAX Credits) left 
+         * @return the remaining Tax Credits
          */
         public int getSinglePersonTaxCredits() {
             return singlePersonTaxCredits;
         } 
+        
+        
+        
+        
+        
+        
+        
+        
 
 
+                
+
+                    /**
+                     * it calculates 4% of income over 352 per week
+                     * @param salary that holds the variable of weekly payment
+                     * @return Deducted salary
+                     */
+                    public double getPRSI_Tax(double salary) {
+                       
+                       double percentage = 4;
+                       double percent = 100;
+                       
+                       double PRSIresults = percentage * salary / percent - this.PRSI_credits;
+                      
+                        // two decimal number formating    
+                        PRSIresults = Math.round(PRSIresults * 100);
+                        PRSIresults = PRSIresults/100;
+                                    
+                    return PRSIresults;
+                    }
+
+             
+        
+        
         /** 
          * @param amount get user input
          * Calculate the user input against Yearly Tax Credits
@@ -229,7 +273,7 @@
 
         /**
         * If not valid, keep asking
-        * @param prompt -- the message or question to the user
+        * @param prompt -- the number to the user
         * @return -- valid user input
         */
         public int getUserInt(int prompt){
@@ -257,7 +301,7 @@
                    }    
                }while (!valid);
 
-               //userInput must be text now
+               //userInput must be int now
                return (userInput);  
            }
         
@@ -292,8 +336,8 @@
                }while (!valid);
              
 
-               //userInput must be text now
-               return userInput;  
+               //userInput must be double now
+               return (userInput);  
            }
 
 
@@ -336,15 +380,4 @@
             //userInput must be text now
             return (userInput);
         }
-
-        
-        public double remaningBalanceGrossPay(){
-        
-        // 2) diference between gross pay & weekly gross pay limit = balance to be taxed at 40%
-        double  remainingBalance = 0.0;
-        System.out.println("REMAINING BALANCE = " + remainingBalance );
-            
-        return remainingBalance; 
-        } 
-
     }

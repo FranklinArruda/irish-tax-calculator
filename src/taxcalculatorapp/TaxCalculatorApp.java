@@ -14,13 +14,13 @@
                     public static void main(String[] args) throws IOException {
                       
 
-                        //UserMenu main = new UserMenu();
-                        //main.MainMenu();
-                        
-                        SinglePerson single = new SinglePerson();
-                        single.SinglePersonTax();
-                  
-                       
+                       // UserMenu main = new UserMenu();
+                       // main.MainMenu();
+                   
+                                                
+                         PersonStatus single = new PersonStatus();
+                         single.SinglePersonTax();
+              
                     }
 
                 }

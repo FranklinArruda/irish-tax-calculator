@@ -5,7 +5,7 @@
             <url>src/taxcalculatorapp/Tax.java</url>
             <bookmark id="1">
                 <name/>
-                <line>106</line>
+                <line>107</line>
                 <key/>
             </bookmark>
         </file>
@@ -14,7 +14,7 @@
         <group name="IN_PROGRESS">
             <file>file:/C:/Users/STUDENT/Desktop/TAX%20Calculator%20PROJECT/TaxCalculatorApp/src/taxcalculatorapp/Tax.java</file>
             <file>file:/C:/Users/STUDENT/Desktop/TAX%20Calculator%20PROJECT/TaxCalculatorApp/src/taxcalculatorapp/TaxCalculatorApp.java</file>
-            <file>file:/C:/Users/STUDENT/Desktop/TAX%20Calculator%20PROJECT/TaxCalculatorApp/src/taxcalculatorapp/SinglePerson.java</file>
+            <file>file:/C:/Users/STUDENT/Desktop/TAX%20Calculator%20PROJECT/TaxCalculatorApp/src/taxcalculatorapp/PersonStatus.java</file>
         </group>
     </open-files>
 </project-private>
