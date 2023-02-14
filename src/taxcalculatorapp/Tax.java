@@ -27,11 +27,6 @@
             this.emergencyTax = 40; 
             this.PRSI_credits = 12;
         }
-
-   
-
-
-        
         
         /**
          * 
@@ -177,38 +172,26 @@
         public int getSinglePersonTaxCredits() {
             return singlePersonTaxCredits;
         } 
-        
-        
-        
-        
-        
-        
-        
-        
 
+        
+        /**
+         * it calculates 4% of income over 352 per week
+         * @param salary that holds the variable of weekly payment
+         * @return Deducted salary
+         */
+        public double getPRSI_Tax(double salary) {
 
-                
+           double percentage = 4;
+           double percent = 100;
 
-                    /**
-                     * it calculates 4% of income over 352 per week
-                     * @param salary that holds the variable of weekly payment
-                     * @return Deducted salary
-                     */
-                    public double getPRSI_Tax(double salary) {
-                       
-                       double percentage = 4;
-                       double percent = 100;
-                       
-                       double PRSIresults = percentage * salary / percent - this.PRSI_credits;
-                      
-                        // two decimal number formating    
-                        PRSIresults = Math.round(PRSIresults * 100);
-                        PRSIresults = PRSIresults/100;
-                                    
-                    return PRSIresults;
-                    }
+           double PRSIresults = percentage * salary / percent - this.PRSI_credits;
 
-             
+            // two decimal number formating    
+            PRSIresults = Math.round(PRSIresults * 100);
+            PRSIresults = PRSIresults/100;
+
+        return PRSIresults;
+        }
         
         
         /** 
@@ -230,20 +213,21 @@
 
         /**
          * @return the amount of (TAX Credits) left 
-        */
+         */
         public int getMarriedPersonTaxCredits() {
-            return marriedPersonTaxCredits;
-        } 
+             return marriedPersonTaxCredits;
+         } 
+        
         
         /**
-         * 
+         * @param salary that holds the salary value when method is called
          * @return gross deductions taxed at 20%
          */
-        public double regularTaxDeduction(){
+        public double regularTaxDeduction(double salary){
             
             // finding gross deductions (Gross pay * 20% / 100%)
             int percentage = 100;                    
-            double regularTaxDeduction = getWeeklyPayLimit() * this.regularTax / percentage;
+            double regularTaxDeduction =  salary * this.regularTax / percentage;
             
             // two decimal number formating    
             regularTaxDeduction = Math.round(regularTaxDeduction * 100);
@@ -255,13 +239,14 @@
         
         /**
          * 
+         * @param remainingBalance that holds the salary value when method is called
          * @return gross deductions taxed at 40%
          */
-        public double emergencyTaxDeduction(){
+        public double emergencyTaxDeduction(double remainingBalance){
             
             // finding gross deductions (Gross pay * 20% / 100%)
             int percentage = 100;                    
-            double emergencyTaxDeduction = getWeeklyPayLimit() * this.emergencyTax / percentage;
+            double emergencyTaxDeduction = remainingBalance * this.emergencyTax / percentage;
             
             // two decimal number formating    
             emergencyTaxDeduction = Math.round(emergencyTaxDeduction * 100);

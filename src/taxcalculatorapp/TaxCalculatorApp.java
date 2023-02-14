@@ -18,8 +18,11 @@
                        // main.MainMenu();
                    
                                                 
-                         PersonStatus single = new PersonStatus();
-                         single.SinglePersonTax();
+                          PersonStatus single = new PersonStatus();
+                          single.SinglePersonTax();
+                         
+                       //Tax deduction_40 = new Tax();
+                       //System.out.println(deduction_40.emergencyTaxDeduction(140.00));
               
                     }
 
