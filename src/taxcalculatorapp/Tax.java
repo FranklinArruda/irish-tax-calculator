@@ -2,6 +2,7 @@
     package taxcalculatorapp;
     import java.io.BufferedReader;
     import java.io.InputStreamReader;
+import java.util.Scanner;
 
     /**
      * @author FRANKLIN
@@ -9,7 +10,8 @@
     public class Tax {
     
         // Setting up Attributes 
-        private double rateBand1;
+        private double singlePersonRateBand;
+        private double marriedPersonRateBand;
         private double singlePersonTaxCredits;
         private double marriedPersonTaxCredits;
         private int regularTax;
@@ -20,7 +22,8 @@
         // default constructor (initialised)  
         public Tax(){
 
-            this.rateBand1 = 40000;
+            this.singlePersonRateBand = 40000;
+            this.marriedPersonRateBand = 49000;
             this.singlePersonTaxCredits = 3500;
             this.marriedPersonTaxCredits = 5325; //3500 + 1775 = Married person (5325)
             this.regularTax = 20;
@@ -46,6 +49,50 @@
             PRSIresults = PRSIresults/100;
 
         return PRSIresults;
+        }
+        
+        
+       
+        /**
+         * Calculates Pension Scheme against user input
+         * @param salary as parameter
+         * @return pension results
+         */
+        public double getPension(double salary) {
+
+           // BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+            Scanner myKeyboard = new Scanner( System.in );
+             
+            double PensionResults = 0;
+            double getUserpension = -1;
+            boolean valid = false;
+            
+            do{
+                try {
+                     //getUserpension = Integer.parseInt(myKeyboard.readLine().trim()); 
+                     getUserpension = myKeyboard.nextDouble();
+                     
+                    //check that the value is allowed by checking range
+                    if (getUserpension <0){
+                        System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
+                    }
+
+                    else {
+                        //must be OK
+                        PensionResults = getUserpension * salary / 100;
+
+                        // two decimal number formating    
+                        PensionResults = Math.round(PensionResults * 100);
+                        PensionResults = PensionResults/100;
+                        valid = true;
+                    }
+                        
+                }catch(Exception e){
+                        // this will be if the parseInt threw an error -- so the user did not enter a number
+                        System.err.println("Only numbers.Please try again!");  
+                    }  
+            }while (!valid);
+        return PensionResults;
         }
         
         
@@ -113,7 +160,7 @@
             // number of weeks throghout the year
             int numberOfWeeks = 52;
 
-            double weeklyPayLimit = this.rateBand1 / numberOfWeeks;
+            double weeklyPayLimit = this.singlePersonRateBand / numberOfWeeks;
 
             // two decimal number formating    
             weeklyPayLimit = Math.round(weeklyPayLimit * 100);
@@ -151,7 +198,7 @@
             // number of fortnightly throghout the year
             int numberOfWeeks = 26;       
 
-            double fortnightlyPayLimit = this.rateBand1 / numberOfWeeks;
+            double fortnightlyPayLimit = this.singlePersonRateBand / numberOfWeeks;
 
             // two decimal number formating    
             fortnightlyPayLimit = Math.round(fortnightlyPayLimit * 100);
@@ -188,7 +235,7 @@
             // number of throghout the year
             int numberOfMonths = 12; 
 
-            double monthlyPayLimit = this.rateBand1 / numberOfMonths;
+            double monthlyPayLimit = this.singlePersonRateBand / numberOfMonths;
 
             // two decimal number formating    
             monthlyPayLimit = Math.round(monthlyPayLimit * 100);
@@ -211,7 +258,9 @@
              do{ 
                 try {
                     System.out.println("Enter Tax Credits for " + companyName );
-                    amount = getUserInt(0); // call method get user input
+                   
+                    // call method get user Double
+                    amount = getUserDouble(); 
 
                 }catch(Exception e){
                    // this will be if the parseInt threw an error -- so the user did not enter a number
@@ -255,7 +304,7 @@
              do{ 
                 try {
                     System.out.println("Enter Tax Credits for " + companyName );
-                    amount = getUserInt(0); // call method get user input
+                    amount = getUserInt(); // call method get user input
 
                 }catch(Exception e){
                 // this will be if the parseInt threw an error -- so the user did not enter a number
@@ -275,7 +324,6 @@
              }while((amount > remainingBalnce)); 
              
              return amount;
-
        }
 
 
@@ -292,7 +340,7 @@
         * @param prompt -- the number to the user
         * @return -- valid user input
         */
-        public int getUserInt(int prompt){
+        public int getUserInt(){
 
             BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
 
@@ -328,14 +376,14 @@
         */
         public double getUserDouble(){
 
-            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
-
+           
+            Scanner myKeyboard = new Scanner( System.in );
             boolean valid = false;
             double userInput=-1; //defaulted to -1 because it needs to have a value for validating
 
                 do{     
                     try {
-                        userInput = Double.parseDouble(myKeyboard.readLine());
+                        userInput = myKeyboard.nextDouble();
 
                         //check that the value is allowed by checking range
                         if (userInput <= 0){

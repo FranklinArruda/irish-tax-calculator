@@ -19,7 +19,7 @@
                         single.SinglePersonTax();
                          
                         //Tax deduction_40 = new Tax();
-                        //System.out.println(deduction_40.getFortnightlyPayLimit());
+                        //System.out.println(deduction_40.getPension(560, 3));
                     }
 
                 }

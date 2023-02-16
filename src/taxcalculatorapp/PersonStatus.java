@@ -21,21 +21,23 @@
         public void SinglePersonTax() throws IOException{
  
             // Instantiating class to use method for calculating tax
-            Tax userInt = new Tax(); 
-            Tax userText = new Tax(); 
-            Tax userDouble = new Tax();
+            
+            Tax userInt = new Tax(); // call method get user int
+            Tax userText = new Tax(); // call method get user text
+            Tax userDouble = new Tax(); // call method get user double
             Tax weeklyPayLimit = new Tax(); // call weekly pay limit method
             Tax fortnightlyPayLimit = new Tax(); // call fortnightly pay limit method
             Tax monthlyPayLimit = new Tax(); //// call monthly pay limit method
-            Tax taxCredits = new Tax();
-            Tax PRSI_tax = new Tax();
-            Tax tax_40 = new Tax();
-  
-                      
+            Tax getTaxCredits = new Tax(); // call method get weekly, fortnightly and monthly tax credits
+            Tax PRSI_tax = new Tax(); // call method get PRSI Tax
+            Tax userPension = new Tax(); // call method get PRSI Tax
+            
+       
+            
             System.out.println("How many employers are you currently working for?");
 
             // method to get numbers of employers from user
-            int numberOfEmployers = userInt.getUserInt(0); // initialized zero
+            int numberOfEmployers = userInt.getUserInt(); // initialized zero
 
             // getting employers name based upon numbers of employers entered by the user
             String companyName [] = new String [numberOfEmployers];
@@ -51,7 +53,7 @@
                 for(int i=0; i<companyName.length; i++) {
         
                     //method to get USERs Tax Credits 
-                    double userTax = userInt.SinglePersonTaxCreditBalance(companyName[i],0);
+                    double userTax = userDouble.SinglePersonTaxCreditBalance(companyName[i],0);
                       
                     // Payment frequency menu   
                     String userMenu = "How often are getting paid by " + companyName[i] + " ? " + "\n"
@@ -65,7 +67,7 @@
                     System.out.println(userMenu);
 
                     // get user input and assigning the (i) counter into Get user int method
-                    int paymentFrequency = userInt.getUserInt(i); 
+                    int paymentFrequency = userInt.getUserInt(); 
                     
                     // variables to store weekly gross pay and hours per week
                     double weeklyGrossPay = 0;
@@ -74,7 +76,8 @@
                     double hoursPerWeek = 0;
                     double hoursFortnightly = 0;
                     double monthlyHours = 0;
-          
+                    double PensionResult = 0;
+                    
                     
                     // --------- PAYMENT FREQUENCY STATEMENT --------------
                     switch (paymentFrequency){
@@ -85,6 +88,14 @@
                         // get weekly gross pay from user
                         System.out.println("Enter your Weekly Groos pay for " + companyName[i]);
                         weeklyGrossPay = userDouble.getUserDouble(); // calling get user double to validate input 
+                        
+                        // get pension percentage from user and returning pension results
+                        System.out.println("Are you in Pension Scheme? \n"
+                                + "If you are not sure how much in % you are paying please contact your Employer and try again later \n" 
+                                + "Or proceed without entering your Pension Scheme percentage \n");
+                        PensionResult = userPension.getPension(weeklyGrossPay); // Getting pension scheme
+                        
+                        System.out.println("Your are paying \u20ac => " + PensionResult + " per payment");
 
                         // hours per week
                         System.out.println("How many hours do you usually work on a Weekly bases for " + companyName[i]);
@@ -113,11 +124,11 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                             
                             // 3) finding the weekly tax credits
-                            double currentTaxCredits = taxCredits.getWeeklyTaxCredits(userTax);
+                            double currentTaxCredits = getTaxCredits.getWeeklyTaxCredits(userTax);
                             System.out.println("CURRENT TAX CREDITS OUT OF " + userTax + " = " +  currentTaxCredits);
                            
                             // 4) finding Tax Payable 20%
-                            double taxPayble_20 = grossDeduction - taxCredits.getWeeklyTaxCredits(userTax);
+                            double taxPayble_20 = grossDeduction - getTaxCredits.getWeeklyTaxCredits(userTax);
                             System.out.format("TAX at 20 percent = %.2f\n", taxPayble_20);
                            
                             // 5) finding net pay 20%
@@ -128,7 +139,7 @@
                             //-------------- EMERGENCY TAX DEDUCTION at 40% ---------------
                           
                             // 1) Calling emergency tax deduction and assigning the remaning balance in the parameter
-                            double taxPayble_40 = tax_40.emergencyTaxDeduction(remainingBalance);
+                            double taxPayble_40 = getTaxCredits.emergencyTaxDeduction(remainingBalance);
                             System.out.format("GROSS DEDUCTIONS at 40 = %.2f\n", taxPayble_40);
                           
                             // 2) total deduction 
@@ -200,7 +211,7 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                           
                             // 2) finding Tax Payble
-                            double taxPayable = grossDeduction - taxCredits.getWeeklyTaxCredits(userTax);
+                            double taxPayable = grossDeduction - getTaxCredits.getWeeklyTaxCredits(userTax);
 
                             // 3) finding net pay 20%
                             double NET_PAY = weeklyGrossPay - taxPayable - PRSI;
@@ -219,7 +230,7 @@
                             System.out.println("First we find the gross deductions of your weekly gross pay " 
                             + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
 
-                            System.out.println("Then we use your current Tax Credits of  \u20ac " + taxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction" 
+                            System.out.println("Then we use your current Tax Credits of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction" 
                                      + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " Tax Payble" + "\n");
                           
                             System.out.println("At last, gross payment \u20ac " + df.format(weeklyGrossPay) + " - \u20ac" + df.format(taxPayable) + " Tax payable "
@@ -239,7 +250,7 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                           
                             // 2) finding Tax Payble
-                            double taxPayable = grossDeduction - taxCredits.getWeeklyTaxCredits(userTax);
+                            double taxPayable = grossDeduction - getTaxCredits.getWeeklyTaxCredits(userTax);
 
                             // 3) finding net pay 20%
                             double NET_PAY = weeklyGrossPay - taxPayable;
@@ -255,7 +266,7 @@
                             System.out.println("First we find the gross deductions of your weekly gross pay " 
                             + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
 
-                            System.out.println("Then we use your current Tax Credits of  \u20ac " + taxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction" 
+                            System.out.println("Then we use your current Tax Credits of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction" 
                                      + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " Tax Payble" + "\n");
 
                             System.out.println("At last, tax payble \u20ac " + df.format(taxPayable) + " - \u20ac" + df.format(weeklyGrossPay) + " weekly gross pay");
@@ -298,11 +309,11 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                             
                             // 3) finding the fortnightly tax credits
-                            double currentTaxCredits = taxCredits.getFortnightlyTaxCredits(userTax);
+                            double currentTaxCredits = getTaxCredits.getFortnightlyTaxCredits(userTax);
                             System.out.println("CURRENT TAX CREDITS OUT OF " + userTax + " = " +  currentTaxCredits);
                            
                             // 4) finding Tax Payable 20%
-                            double taxPayble_20 = grossDeduction - taxCredits.getFortnightlyTaxCredits(userTax);
+                            double taxPayble_20 = grossDeduction - getTaxCredits.getFortnightlyTaxCredits(userTax);
                             System.out.format("TAX at 20 percent = %.2f\n", taxPayble_20);
                            
                             // 5) finding net pay 20%
@@ -313,7 +324,7 @@
                             //-------------- EMERGENCY TAX DEDUCTION at 40% ---------------
                           
                             // 1) Calling emergency tax deduction and assigning the remaning balance in the parameter
-                            double taxPayble_40 = tax_40.emergencyTaxDeduction(remainingBalance);
+                            double taxPayble_40 = getTaxCredits.emergencyTaxDeduction(remainingBalance);
                             System.out.format("GROSS DEDUCTIONS at 40 = %.2f\n", taxPayble_40);
                           
                             // 2) total deduction 
@@ -339,7 +350,7 @@
                             System.out.println("Therefore \u20ac " + df.format(fortnightlyPayLimit.getFortnightlyPayLimit()) +" is your gross pay (limit) every two weeks "
                             + "and any value above that limit will be taxed at 40%" + "\n");
 
-                             System.out.println("However, your groos pay is above the 704 fortnightly which means you also must "
+                            System.out.println("However, your groos pay is above the 704 fortnightly which means you also must "
                                     + "pay 4% PRSI of your Gross payment less (PRSI Credits of 12 euros for each payment)");
                              
                             System.out.println("Your Tax Credits is Currently \u20ac" + userTax + " divided by " 
@@ -385,7 +396,7 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                           
                             // 2) finding Tax Payble
-                            double taxPayable = grossDeduction - taxCredits.getFortnightlyTaxCredits(userTax);
+                            double taxPayable = grossDeduction - getTaxCredits.getFortnightlyTaxCredits(userTax);
 
                             // 3) finding net pay 20%
                             double NET_PAY = fornightlyGrossPay - taxPayable - PRSI;
@@ -404,7 +415,7 @@
                             System.out.println("First we find the gross deductions of your fortnightly gross pay " 
                             + df.format(fornightlyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
 
-                            System.out.println("Then we use your current Tax Credits of  \u20ac " + taxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction" 
+                            System.out.println("Then we use your current Tax Credits of  \u20ac " + getTaxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction" 
                                      + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " Tax Payble" + "\n");
                           
                             System.out.println("At last, gross payment \u20ac " + df.format(fornightlyGrossPay) + " - \u20ac" + df.format(taxPayable) + " Tax payable "
@@ -424,7 +435,7 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                           
                             // 2) finding Tax Payble
-                            double taxPayable = grossDeduction - taxCredits.getFortnightlyTaxCredits(userTax);
+                            double taxPayable = grossDeduction - getTaxCredits.getFortnightlyTaxCredits(userTax);
 
                             // 3) finding net pay 20%
                             double NET_PAY = fornightlyGrossPay - taxPayable;
@@ -440,7 +451,7 @@
                             System.out.println("First we find the gross deductions of your Fortnightly gross pay " 
                             + df.format(fornightlyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
 
-                            System.out.println("Then we use your current Tax Credits of  \u20ac " + taxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction" 
+                            System.out.println("Then we use your current Tax Credits of  \u20ac " + getTaxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction" 
                                      + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " Tax Payble" + "\n");
 
                             System.out.println("At last, tax payble \u20ac " + df.format(taxPayable) + " - \u20ac" + df.format(fornightlyGrossPay) + " Fortnightly gross pay");
@@ -483,11 +494,11 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                             
                             // 3) finding the weekly tax credits
-                            double currentTaxCredits = taxCredits.getMonthlyTaxCredits(userTax);
+                            double currentTaxCredits = getTaxCredits.getMonthlyTaxCredits(userTax);
                             System.out.println("CURRENT TAX CREDITS OUT OF " + userTax + " = " +  currentTaxCredits);
                            
                             // 4) finding Tax Payable 20%
-                            double taxPayble_20 = grossDeduction - taxCredits.getMonthlyTaxCredits(userTax);
+                            double taxPayble_20 = grossDeduction - getTaxCredits.getMonthlyTaxCredits(userTax);
                             System.out.format("TAX at 20 percent = %.2f\n", taxPayble_20);
                            
                             // 5) finding net pay 20%
@@ -498,7 +509,7 @@
                             //-------------- EMERGENCY TAX DEDUCTION at 40% ---------------
                           
                             // 1) Calling emergency tax deduction and assigning the remaning balance in the parameter
-                            double taxPayble_40 = tax_40.emergencyTaxDeduction(remainingBalance);
+                            double taxPayble_40 = getTaxCredits.emergencyTaxDeduction(remainingBalance);
                             System.out.format("GROSS DEDUCTIONS at 40 = %.2f\n", taxPayble_40);
                           
                             // 2) total deduction 
@@ -570,7 +581,7 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                           
                             // 2) finding Tax Payble
-                            double taxPayable = grossDeduction - taxCredits.getMonthlyTaxCredits(userTax);
+                            double taxPayable = grossDeduction - getTaxCredits.getMonthlyTaxCredits(userTax);
 
                             // 3) finding net pay 20%
                             double NET_PAY = monthlyGrossPay - taxPayable - PRSI;
@@ -589,7 +600,7 @@
                             System.out.println("First we find the gross deductions of your monthly gross pay " 
                             + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
 
-                            System.out.println("Then we use your current Tax Credits of  \u20ac " + taxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction" 
+                            System.out.println("Then we use your current Tax Credits of  \u20ac " + getTaxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction" 
                                      + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " Tax Payble" + "\n");
                           
                             System.out.println("At last, gross payment \u20ac " + df.format(monthlyGrossPay) + " - \u20ac" + df.format(taxPayable) + " Tax payable "
@@ -609,7 +620,7 @@
                             System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                           
                             // 2) finding Tax Payble
-                            double taxPayable = grossDeduction - taxCredits.getMonthlyTaxCredits(userTax);
+                            double taxPayable = grossDeduction - getTaxCredits.getMonthlyTaxCredits(userTax);
 
                             // 3) finding net pay 20%
                             double NET_PAY = monthlyGrossPay - taxPayable;
@@ -625,15 +636,14 @@
                             System.out.println("First we find the gross deductions of your monthly gross pay " 
                             + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
 
-                            System.out.println("Then we use your current Tax Credits of  \u20ac " + taxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction" 
+                            System.out.println("Then we use your current Tax Credits of  \u20ac " + getTaxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction" 
                                      + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " Tax Payble" + "\n");
 
                             System.out.println("At last, tax payble \u20ac " + df.format(taxPayable) + " - \u20ac" + df.format(monthlyGrossPay) + " monthly gross pay");
 
                             System.out.println("Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period " + "\n"); 
                         }
-                        break;
-                        
+                        break;  
                     }
                 }
             }
