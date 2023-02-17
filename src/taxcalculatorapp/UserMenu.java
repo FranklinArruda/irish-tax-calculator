@@ -1,6 +1,10 @@
 
 package taxcalculatorapp;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -11,24 +15,45 @@ public class UserMenu {
     int selectedOption=0; 
     
      public void MainMenu() throws IOException{
-  
-        // Main users MENU
-        String userChoice ="Please Choose: " + "\n"
-                    + "------------------" + "\n"
-                    + "1: Tax Calculation" + "\n"
-                    + "2: Financial Planning";
-         // prompting user option
-        System.out.println("Hello there , " + "\n" + userChoice);
         
-        // calling method to get users INT and initializing the return type to zero
-        Tax getUserInput = new Tax(); 
-        selectedOption = getUserInput.getUserInt(0);
+        BufferedReader kb = new BufferedReader(new InputStreamReader(System.in));          
+        int userChoice = 0; // Gets user input
         
-        if ( selectedOption == 1){
-            String userMenu ="What is your Status:" + "\n"
-                + "------------" + "\n"
-                + "1: Single" + "\n"
-                + "2: Married";
+        // getting current time to greeting the user
+        GregorianCalendar time = new GregorianCalendar();
+        int hour = time.get(Calendar.HOUR_OF_DAY);
+
+         // Main users MENU
+        String userOption ="Please Choose: " + "\n"
+                + "------------------" + "\n"
+                + "1: Tax Calculation" + "\n"
+                + "2: Financial Planning";
+
+            if (hour < 12){
+             System.out.println("Good Morning!" + "\n" + userOption);
+            }
+
+            else if (hour < 17 && !(hour == 12)){
+            System.out.println("Good Afternoon" + "\n" + userOption);
+            }
+
+            else if (hour == 12){
+            System.out.println("Good Noon" + "\n" + userOption);
+            }
+
+            else{
+            System.out.println("Good Evening" + "\n" + userOption);
+            }
+        
+            // calling method to get users INT and initializing the return type to zero
+            Tax getUserInput = new Tax(); 
+            selectedOption = getUserInput.getUserInt();
+        
+            if ( selectedOption == 1){
+                String userMenu ="What is your Status:" + "\n"
+                    + "------------" + "\n"
+                    + "1: Single" + "\n"
+                    + "2: Married";
 
                 // prompting user option
                 System.out.println("Welcome to your Tax Calculation! " + "\n" 
@@ -42,8 +67,8 @@ public class UserMenu {
                         + "\n"
                         + userMenu);
 
-                    // calling method to get users INT and initializing the return type to zero
-                    int user = getUserInput.getUserInt(0);
+                // calling method to get users INT and initializing the return type to zero
+                int user = getUserInput.getUserInt();
                    
                     // user option switch 
                     switch(user){
@@ -60,12 +85,9 @@ public class UserMenu {
 
                         default:// do nothing  
                }
-        }
-        
-        else if (selectedOption == 2){
-            
+        } 
+        else if (selectedOption == 2){      
                  System.out.println("You MUST Finish the Single Person calculation first");
         }
-
     }
 }

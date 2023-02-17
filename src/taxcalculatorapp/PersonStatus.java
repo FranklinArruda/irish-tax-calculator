@@ -31,8 +31,8 @@
             Tax getTaxCredits = new Tax(); // call method get weekly, fortnightly and monthly tax credits
             Tax PRSI_tax = new Tax(); // call method get PRSI Tax
             Tax userPension = new Tax(); // call method get PRSI Tax
-            
-       
+            Tax userUSC = new Tax(); // call method get PRSI Tax
+      
             
             System.out.println("How many employers are you currently working for?");
 
@@ -42,14 +42,14 @@
             // getting employers name based upon numbers of employers entered by the user
             String companyName [] = new String [numberOfEmployers];
 
-                // get user input by reading employers name through numbers of employers
-                // call get user text method 
+            
+                //--------GETTING company name through numbers of employers 
                 for(int i=0; i < numberOfEmployers; i++){
-
-                    // calling get user text Method
-                    companyName[i] = userText.getUserText("Employer " +(i +1) + " Name:");     
-                }  
-
+                    companyName[i] = userText.getUserText("Employer " +(i +1) + " Name:"); // calling get user text Method
+                } 
+                
+                            
+                //--------READING company name through numbers of employers
                 for(int i=0; i<companyName.length; i++) {
         
                     //method to get USERs Tax Credits 
@@ -69,14 +69,18 @@
                     // get user input and assigning the (i) counter into Get user int method
                     int paymentFrequency = userInt.getUserInt(); 
                     
-                    // variables to store weekly gross pay and hours per week
-                    double weeklyGrossPay = 0;
-                    double fornightlyGrossPay = 0;
-                    double monthlyGrossPay = 0;
+                    // global variables to store results from each method as per description so I can manipulate AND validate
+                    //the result without calling the method more than once
+                    
+                    double weeklyGrossPay = 0; // storing weekly pay
+                    double fornightlyGrossPay = 0; // storing fornight pay
+                    double monthlyGrossPay = 0; // storing monthly pay
+                    double pensionResult = 0;// storing Pension
+                    double USC_result = 0; // storing USC 
+                    
                     double hoursPerWeek = 0;
                     double hoursFortnightly = 0;
                     double monthlyHours = 0;
-                    double PensionResult = 0;
                     
                     
                     // --------- PAYMENT FREQUENCY STATEMENT --------------
@@ -89,14 +93,26 @@
                         System.out.println("Enter your Weekly Groos pay for " + companyName[i]);
                         weeklyGrossPay = userDouble.getUserDouble(); // calling get user double to validate input 
                         
+                        //-----------------------------------------------------------------
                         // get pension percentage from user and returning pension results
-                        System.out.println("Are you in Pension Scheme? \n"
+                        System.out.println("Are you in Pension Scheme ? \n"
                                 + "If you are not sure how much in % you are paying please contact your Employer and try again later \n" 
-                                + "Or proceed without entering your Pension Scheme percentage \n");
-                        PensionResult = userPension.getPension(weeklyGrossPay); // Getting pension scheme
+                                + "Or proceed without entering your Pension Scheme by typing zero:\n");
                         
-                        System.out.println("Your are paying \u20ac => " + PensionResult + " per payment");
-
+                        // Getting pension scheme
+                        pensionResult = userPension.getPension(weeklyGrossPay);                     
+                        System.out.println("Your are paying \u20ac => " + pensionResult + " per payment");
+                        //-----------------------------------------------------------------
+                        
+                        
+                        //-----------------------------------------------------------------
+                        // Getting USC based on gross eraning for the current year
+                        System.out.println("Enter your Estimated Income for " + companyName[i] + " for this year: ");
+                        USC_result = userUSC.getUSC(weeklyGrossPay);
+                        System.out.println("Your are paying USC \u20ac => " + USC_result + " per payment");
+                        //-----------------------------------------------------------------
+                        
+                        
                         // hours per week
                         System.out.println("How many hours do you usually work on a Weekly bases for " + companyName[i]);
                         hoursPerWeek = userDouble.getUserDouble(); // calling get user double to validate input
@@ -146,8 +162,8 @@
                             double TotalPayble = taxPayble_20 + taxPayble_40 ;
                             System.out.format("TOTAL DEDUCTIONS = %.2f\n", TotalPayble);
                          
-                            // 3) finding NET PAY
-                            double NET_PAY = weeklyGrossPay - TotalPayble;
+                            // 3) finding NET PAY 
+                            double NET_PAY = weeklyGrossPay - TotalPayble - USC_result - pensionResult;
                             System.out.format("NET PAY = %.2f\n", NET_PAY);
                      
                             //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
@@ -191,7 +207,7 @@
                             System.out.println("Your tax calculation is \u20ac " + df.format(taxPayble_20) + " + \u20ac " + df.format(taxPayble_40) +" = TOATL Deductions \u20ac " + df.format(TotalPayble));
                             System.out.println("( \u20ac " + df.format(TotalPayble) + " - \u20ac " + df.format(weeklyGrossPay) +" )"+ "\n");
 
-                            System.out.println("And \u20ac " + df.format(weeklyGrossPay) + " - PRSI " + PRSI);
+                            System.out.println("And \u20ac " + df.format(weeklyGrossPay) + " - PRSI " + PRSI + " - Pension " + pensionResult + " - USC " + USC_result );
                             System.out.println("Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period " + "\n"); 
                         }
 

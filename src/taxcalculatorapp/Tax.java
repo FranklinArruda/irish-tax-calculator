@@ -33,16 +33,15 @@ import java.util.Scanner;
         
         
         /**
-         * it calculates 4% of income over 352 per week
+         * it calculates 4% from income over 352 per week
          * @param salary that holds the variable of weekly payment
          * @return Deducted salary
          */
         public double getPRSI_Tax(double salary) {
 
-           double percentage = 4;
-           double percent = 100;
-
-           double PRSIresults = percentage * salary / percent - this.PRSI_credits;
+           double taxRate_4 = 4;
+         
+           double PRSIresults = taxRate_4 * salary / 100 - this.PRSI_credits;
 
             // two decimal number formating    
             PRSIresults = Math.round(PRSIresults * 100);
@@ -52,6 +51,68 @@ import java.util.Scanner;
         }
         
         
+        /**
+         * It calculates USC Based on the user input
+         * If gross income for the year is up to 12.012,01 ( taxed at 0.5% )
+         * If gross income for the year is above 12.000,01 ( taxed at 2% )
+         * If gross income for the year is in between 22,9920.01 and 70,044,00 ( taxed at 4.5% )
+         * @param salary to assign the result from the main
+         * @return USC results
+         */
+        public double getUSC(double salary) {
+
+          double incomeBand_1 = 0.5; // Up to €12,012.01  at 0.5%
+          double incomeBand_2 = 2;  // From €12,012.01 at 2%
+          double incomeBand_3 = 4.5;  //From €22,920.01 to €70,044 at 4.5%
+                    
+           // BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+            Scanner myKeyboard = new Scanner( System.in );
+             
+            double USC_results = 0;
+            double getUserUSC = -1;
+            boolean valid = false;
+            
+            do{
+                try {
+                     //getUserpension = Integer.parseInt(myKeyboard.readLine().trim()); 
+                     getUserUSC = myKeyboard.nextDouble();
+                     
+                    //check that the value is allowed by checking range
+                    if (getUserUSC <0){
+                        System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
+                        valid = false;
+                    }
+                    
+                    // it calculates income up to 12,012.00 a year at 0,5%
+                    else if (getUserUSC <12012){ 
+                        USC_results = incomeBand_1 * salary / 100;
+                        valid = true;//must be OK
+                    }
+                    
+                    // it calculates income from 12,012.00 to 22,920.00 a year at 2%
+                    else if ((getUserUSC >12012) && (getUserUSC <22920)){
+                        USC_results = incomeBand_2 * salary / 100;
+                        valid = true;//must be OK
+                    }
+                    
+                    // it calculates income from 22,920.00 up to 70,044.00 a year at 4.5%
+                    else if ((getUserUSC >22920) && (getUserUSC <70044)){
+                        USC_results = incomeBand_3 * salary / 100;
+                        valid = true;//must be OK
+                    }
+                    
+                        // two decimal number formating   
+                        getUserUSC = Math.round(getUserUSC * 100);
+                        getUserUSC = getUserUSC/100;
+                        
+                }catch(Exception e){
+                        // this will be if the parseInt threw an error -- so the user did not enter a number
+                        System.err.println("Only numbers.Please try again!");  
+                    }  
+            }while (!valid);
+        return USC_results;
+        }
+ 
        
         /**
          * Calculates Pension Scheme against user input
@@ -80,12 +141,11 @@ import java.util.Scanner;
                     else {
                         //must be OK
                         PensionResults = getUserpension * salary / 100;
-
+                        valid = true;
+                    }    
                         // two decimal number formating    
                         PensionResults = Math.round(PensionResults * 100);
                         PensionResults = PensionResults/100;
-                        valid = true;
-                    }
                         
                 }catch(Exception e){
                         // this will be if the parseInt threw an error -- so the user did not enter a number

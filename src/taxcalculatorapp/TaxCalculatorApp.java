@@ -12,11 +12,11 @@
                      */
                     public static void main(String[] args) throws IOException {
        
-                        //UserMenu main = new UserMenu();
-                        //main.MainMenu();
+                        UserMenu main = new UserMenu();
+                        main.MainMenu();
                                        
-                        PersonStatus single = new PersonStatus();
-                        single.SinglePersonTax();
+                        //PersonStatus single = new PersonStatus();
+                        //single.SinglePersonTax();
                          
                         //Tax deduction_40 = new Tax();
                         //System.out.println(deduction_40.getPension(560, 3));
