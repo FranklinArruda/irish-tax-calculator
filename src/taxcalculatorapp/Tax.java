@@ -1,6 +1,7 @@
 
     package taxcalculatorapp;
     import java.io.BufferedReader;
+import java.io.IOException;
     import java.io.InputStreamReader;
 import java.util.Scanner;
 
@@ -72,45 +73,40 @@ import java.util.Scanner;
             double getUserUSC = -1; // get user input
             boolean valid = false; // boolean to validate USC
             
-            //will keep doing while is not valid
-            do{  
+            
+              // CALLING Get User Double to validate user input
+               getUserUSC = getUserDouble();
+               
                 try {
-                     //getUserpension = Integer.parseInt(myKeyboard.readLine().trim()); 
-                     getUserUSC = myKeyboard.nextDouble();
-                     
-                    //check that the value is allowed by checking range
-                    if (getUserUSC <0){
-                        System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
-                        valid = false;
-                    }
-                    
-                    // it calculates income up to 12,012.00 a year at (0,5%)
-                    else if (getUserUSC <12012){ 
-                        USC_results = incomeBand_1 * salary / 100;
-                        valid = true;//must be OK
-                    }
-                    
-                    // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
-                    else if ((getUserUSC >12012) && (getUserUSC <22920)){
-                        USC_results = incomeBand_2 * salary / 100;
-                        valid = true;//must be OK
-                    }
-                    
-                    // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
-                    else if ((getUserUSC >22920) && (getUserUSC <70044)){
-                        USC_results = incomeBand_3 * salary / 100;
-                        valid = true;//must be OK
-                    }
+                    do{
+                        // it calculates income up to 12,012.00 a year at (0,5%)
+                        if (getUserUSC <12012){ 
+                            USC_results = incomeBand_1 * salary / 100;
+                            valid = true;//must be OK
+                        }
+
+                        // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
+                        else if ((getUserUSC >12012) && (getUserUSC <22920)){
+                            USC_results = incomeBand_2 * salary / 100;
+                            valid = true;//must be OK
+                        }
+
+                        // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
+                        else if ((getUserUSC >22920) && (getUserUSC <70044)){
+                            USC_results = incomeBand_3 * salary / 100;
+                            valid = true;//must be OK
+                        }
                     
                         // two decimal number formating   
                         getUserUSC = Math.round(getUserUSC * 100);
                         getUserUSC = getUserUSC/100;
                         
+                    }while (!valid);   
+                    
                 }catch(Exception e){
                         // this will be if the parseInt threw an error -- so the user did not enter a number
                         System.err.println("Only numbers.Please try again!");  
-                    }  
-            }while (!valid);
+                    }     
         return USC_results;
         }
  
@@ -120,51 +116,118 @@ import java.util.Scanner;
          * @param salary as parameter
          * @return pension results
          */
-        public double getPension(double salary) {
+        public double getPension(double salary){
 
-            // I chose scanner over BufferedReader as I am reading double from the user 
-            Scanner myKeyboard = new Scanner( System.in );
+           BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
              
             double PensionResults = 0;
             double getUserpension = -1;
+            boolean userPension = false;
             boolean valid = false;
             String userChoice = "";
             
-                userChoice=myKeyboard.next().trim();
-           
-                try {
-                    switch(userChoice){
-                        case "Y": 
-                           do{
-                                System.out.println("What percentage are you paying on your Pension Scheme?");
-                                getUserpension = myKeyboard.nextDouble();
-                                
-                               //check that the value is allowed by checking range
-                               if (getUserpension <0){
-                                   System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
-                                } 
-                                
-                               //must be OK
-                               else { 
-                                PensionResults = getUserpension * salary / 100;
-                                valid = true;
-                                } 
-                           }while (!valid);
-                            break;
-                            
-                        case "N":
-                            System.out.println("No pension contribution for this period");
-                            break;
+            
+                //prompt user until input is valid
+                do{  
+                   try {
+                    userChoice = myKeyboard.readLine().trim();
+
+                     // space between letter 'Z' and square brackets ']' in case the user types two words   
+                     if(!userChoice.matches("[a-zA-Z ]+")){
+                        System.err.println("Only Letters Allowed. Please try again by Entering Y (YES) / N (NO)");
+                        valid=false;
                     }
+
+                     else if (userChoice.equals("Y")){
+                         do{
+                                 try{
+                                    System.out.println("What percentage are you paying on your Pension Scheme?");
+                                    getUserpension = Double.parseDouble(myKeyboard.readLine());
+                                         
+                                    //check that the value is allowed by checking range
+                                    if (getUserpension <=0){
+                                        System.err.println("Invalid value entered. Please enter a number greater than ZERO");
+                                        userPension=false;
+                                     } 
+
+                                    //must be OK
+                                    else { 
+                                                                                  
+                                         PensionResults = getUserpension * salary / 100; 
+                                         userPension = true;
+                                     }
+                                 }catch(Exception e){
+                                        // this will be if the parseInt threw an error -- so the user did not enter a number
+                                        System.err.println("Only Numbers. Please try again!");  
+                                } 
+                                }while ((!userPension) );
+                        valid=true;
+                     }
                      
+                     else if (userChoice.equals("N")){
+                            System.out.println("No pension contribution for this period");
+                            valid=true;
+                    } 
+                     
+                     
+                   }catch(Exception e){
+                        // this will be if the parseInt threw an error -- so the user did not enter a number   
+                    System.err.println("Something went Wrong. Please try Again!");  
+                   }
+                
+                }while ((!valid));//(!userChoice.equals("Y"));
+            
+            /*do{
+               
+                 // getting input from the user Y/N
+                 userChoice = myKeyboard.readLine().toUpperCase().trim();//in case the user types lower case and press space
+                   
+                    // VALIDATE Yes or No for the user
+                    // If user chooses Y, then (case "Y") is executed
+                    // If user chooses N, then (case "N") carry on with the program 
+                    //-------USER CHOICE IS ( YES )---------    
+                    if (!userChoice.equals("Y")){ 
+                            valid = false;
+                             do{
+                                 try{
+                                    System.out.println("What percentage are you paying on your Pension Scheme?");
+                                    getUserpension = Double.parseDouble(myKeyboard.readLine());
+                                         
+                                    //check that the value is allowed by checking range
+                                    if (getUserpension <=0){
+                                        System.err.println("Invalid value entered. Please enter a number greater than ZERO");
+                                        userPension=false;
+                                     } 
+
+                                    //must be OK
+                                    else { 
+                                                                                  
+                                         PensionResults = getUserpension * salary / 100; 
+                                         userPension = true;
+                                     }
+                                 }catch(Exception e){
+                                        // this will be if the parseInt threw an error -- so the user did not enter a number
+                                        System.err.println("Only Numbers. Please try again!");  
+                                } 
+                                }while ((!userPension) );
+                             
+                             valid = true;
+                    }
+                          //----------------------------------------------------------------------------------- 
+                               
+                  
+                           
+                         //-------USER CHOICE IS ( NO )---------    
+                           else{
+                            System.out.println("No pension contribution for this period");
+                            valid = false;
+                    } 
                         // two decimal number formating    
                         PensionResults = Math.round(PensionResults * 100);
                         PensionResults = PensionResults/100;
                         
-                }catch(Exception e){
-                        // this will be if the parseInt threw an error -- so the user did not enter a number
-                        System.err.println("Only numbers.Please try again!");  
-                    }  
+                           
+            }while (!valid); */
         return PensionResults;
         }
         
@@ -449,13 +512,13 @@ import java.util.Scanner;
         */
         public double getUserDouble(){
 
-            Scanner myKeyboard = new Scanner( System.in );
+            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
             boolean valid = false;
             double userInput=-1; //defaulted to -1 because it needs to have a value for validating
 
                 do{     
                     try {
-                        userInput = myKeyboard.nextDouble();
+                        userInput = Double.parseDouble(myKeyboard.readLine());
 
                         //check that the value is allowed by checking range
                         if (userInput <= 0){
@@ -467,7 +530,7 @@ import java.util.Scanner;
                         }
                     }catch(Exception e){
                         // this will be if the parseInt threw an error -- so the user did not enter a number
-                        System.err.println("Only numbers.Please try again!");  
+                        System.err.println("Only numbers!!!");  
                     }    
                 }while (!valid);
 
