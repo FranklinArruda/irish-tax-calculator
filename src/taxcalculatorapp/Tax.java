@@ -61,18 +61,19 @@ import java.util.Scanner;
          */
         public double getUSC(double salary) {
 
-          double incomeBand_1 = 0.5; // Up to €12,012.01  at 0.5%
-          double incomeBand_2 = 2;  // From €12,012.01 at 2%
-          double incomeBand_3 = 4.5;  //From €22,920.01 to €70,044 at 4.5%
-                    
-           // BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+            // I chose scanner over BufferedReader as I am reading double from the user 
             Scanner myKeyboard = new Scanner( System.in );
-             
-            double USC_results = 0;
-            double getUserUSC = -1;
-            boolean valid = false;
             
-            do{
+            double incomeBand_1 = 0.5; // Up to €12,012.01  at 0.5%
+            double incomeBand_2 = 2;  // From €12,012.01 at 2%
+            double incomeBand_3 = 4.5;  //From €22,920.01 to €70,044 at 4.5%     
+            
+            double USC_results = 0; // USC results
+            double getUserUSC = -1; // get user input
+            boolean valid = false; // boolean to validate USC
+            
+            //will keep doing while is not valid
+            do{  
                 try {
                      //getUserpension = Integer.parseInt(myKeyboard.readLine().trim()); 
                      getUserUSC = myKeyboard.nextDouble();
@@ -83,19 +84,19 @@ import java.util.Scanner;
                         valid = false;
                     }
                     
-                    // it calculates income up to 12,012.00 a year at 0,5%
+                    // it calculates income up to 12,012.00 a year at (0,5%)
                     else if (getUserUSC <12012){ 
                         USC_results = incomeBand_1 * salary / 100;
                         valid = true;//must be OK
                     }
                     
-                    // it calculates income from 12,012.00 to 22,920.00 a year at 2%
+                    // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
                     else if ((getUserUSC >12012) && (getUserUSC <22920)){
                         USC_results = incomeBand_2 * salary / 100;
                         valid = true;//must be OK
                     }
                     
-                    // it calculates income from 22,920.00 up to 70,044.00 a year at 4.5%
+                    // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
                     else if ((getUserUSC >22920) && (getUserUSC <70044)){
                         USC_results = incomeBand_3 * salary / 100;
                         valid = true;//must be OK
@@ -121,28 +122,41 @@ import java.util.Scanner;
          */
         public double getPension(double salary) {
 
-           // BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+            // I chose scanner over BufferedReader as I am reading double from the user 
             Scanner myKeyboard = new Scanner( System.in );
              
             double PensionResults = 0;
             double getUserpension = -1;
             boolean valid = false;
+            String userChoice = "";
             
-            do{
+                userChoice=myKeyboard.next().trim();
+           
                 try {
-                     //getUserpension = Integer.parseInt(myKeyboard.readLine().trim()); 
-                     getUserpension = myKeyboard.nextDouble();
-                     
-                    //check that the value is allowed by checking range
-                    if (getUserpension <0){
-                        System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
+                    switch(userChoice){
+                        case "Y": 
+                           do{
+                                System.out.println("What percentage are you paying on your Pension Scheme?");
+                                getUserpension = myKeyboard.nextDouble();
+                                
+                               //check that the value is allowed by checking range
+                               if (getUserpension <0){
+                                   System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
+                                } 
+                                
+                               //must be OK
+                               else { 
+                                PensionResults = getUserpension * salary / 100;
+                                valid = true;
+                                } 
+                           }while (!valid);
+                            break;
+                            
+                        case "N":
+                            System.out.println("No pension contribution for this period");
+                            break;
                     }
-
-                    else {
-                        //must be OK
-                        PensionResults = getUserpension * salary / 100;
-                        valid = true;
-                    }    
+                     
                         // two decimal number formating    
                         PensionResults = Math.round(PensionResults * 100);
                         PensionResults = PensionResults/100;
@@ -151,7 +165,6 @@ import java.util.Scanner;
                         // this will be if the parseInt threw an error -- so the user did not enter a number
                         System.err.println("Only numbers.Please try again!");  
                     }  
-            }while (!valid);
         return PensionResults;
         }
         
@@ -436,7 +449,6 @@ import java.util.Scanner;
         */
         public double getUserDouble(){
 
-           
             Scanner myKeyboard = new Scanner( System.in );
             boolean valid = false;
             double userInput=-1; //defaulted to -1 because it needs to have a value for validating
