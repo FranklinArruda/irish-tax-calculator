@@ -1,9 +1,9 @@
 
     package taxcalculatorapp;
+import Utilities.Utilities;
     import java.io.BufferedReader;
-import java.io.IOException;
     import java.io.InputStreamReader;
-import java.util.Scanner;
+    import java.util.Scanner;
 
     /**
      * @author FRANKLIN
@@ -17,20 +17,20 @@ import java.util.Scanner;
         private double marriedPersonTaxCredits;
         private int regularTax;
         private double emergencyTax;
-        private double PRSI_credits;
+        private double PRSI;
 
 
         // default constructor (initialised)  
         public Tax(){
-
             this.singlePersonRateBand = 40000;
             this.marriedPersonRateBand = 49000;
             this.singlePersonTaxCredits = 3500;
             this.marriedPersonTaxCredits = 5325; //3500 + 1775 = Married person (5325)
             this.regularTax = 20;
             this.emergencyTax = 40; 
-            this.PRSI_credits = 12;
+            this.PRSI = 12;
         }
+  
         
         
         /**
@@ -38,11 +38,11 @@ import java.util.Scanner;
          * @param salary that holds the variable of weekly payment
          * @return Deducted salary
          */
-        public double getPRSI_Tax(double salary) {
+        public double getPRSI(double salary) {
 
            double taxRate_4 = 4;
          
-           double PRSIresults = taxRate_4 * salary / 100 - this.PRSI_credits;
+           double PRSIresults = taxRate_4 * salary / 100 - this.PRSI;
 
             // two decimal number formating    
             PRSIresults = Math.round(PRSIresults * 100);
@@ -53,17 +53,16 @@ import java.util.Scanner;
         
         
         /**
+         * Use Utilities class to get user input 
          * It calculates USC Based on the user input
          * If gross income for the year is up to 12.012,01 ( taxed at 0.5% )
          * If gross income for the year is above 12.000,01 ( taxed at 2% )
          * If gross income for the year is in between 22,9920.01 and 70,044,00 ( taxed at 4.5% )
          * @param salary to assign the result from the main
+         * @param companyName
          * @return USC results
          */
-        public double getUSC(double salary) {
-
-            // I chose scanner over BufferedReader as I am reading double from the user 
-            Scanner myKeyboard = new Scanner( System.in );
+        public double getUSC(double salary, String companyName) {
             
             double incomeBand_1 = 0.5; // Up to €12,012.01  at 0.5%
             double incomeBand_2 = 2;  // From €12,012.01 at 2%
@@ -72,28 +71,28 @@ import java.util.Scanner;
             double USC_results = 0; // USC results
             double getUserUSC = -1; // get user input
             boolean valid = false; // boolean to validate USC
+             
+                System.out.println("Enter your Estimated Income for " + companyName + " this year: ");
+                getUserUSC = getUserDouble();
             
-            
-              // CALLING Get User Double to validate user input
-               getUserUSC = getUserDouble();
-               
                 try {
                     do{
                         // it calculates income up to 12,012.00 a year at (0,5%)
-                        if (getUserUSC <12012){ 
-                            USC_results = incomeBand_1 * salary / 100;
+                        // it must be higher than 0
+                        if ((getUserUSC <12012)){ 
+                            USC_results = (incomeBand_1 * salary / 100);
                             valid = true;//must be OK
                         }
 
                         // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
                         else if ((getUserUSC >12012) && (getUserUSC <22920)){
-                            USC_results = incomeBand_2 * salary / 100;
+                            USC_results = (incomeBand_2 * salary / 100);
                             valid = true;//must be OK
                         }
 
                         // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
                         else if ((getUserUSC >22920) && (getUserUSC <70044)){
-                            USC_results = incomeBand_3 * salary / 100;
+                            USC_results = (incomeBand_3 * salary / 100);
                             valid = true;//must be OK
                         }
                     
@@ -113,6 +112,9 @@ import java.util.Scanner;
        
         /**
          * Calculates Pension Scheme against user input
+         * VALIDATE Yes or No for the user
+         * If user chooses Y, then (case "Y") is executed
+         * If user chooses N, then (case "N") carry on with the program 
          * @param salary as parameter
          * @return pension results
          */
@@ -125,109 +127,67 @@ import java.util.Scanner;
             boolean userPension = false;
             boolean valid = false;
             String userChoice = "";
-            
-            
-                //prompt user until input is valid
+               
                 do{  
                    try {
-                    userChoice = myKeyboard.readLine().trim();
-
-                     // space between letter 'Z' and square brackets ']' in case the user types two words   
-                     if(!userChoice.matches("[a-zA-Z ]+")){
-                        System.err.println("Only Letters Allowed. Please try again by Entering Y (YES) / N (NO)");
+                       
+                    String prompt="Are you in any Pension Scheme? \n"
+                                +"--------------------------\n"
+                                +"Enter: Y (YES) to proceed \n"
+                                +"Enter: N (No) if not sure:";
+                    System.out.println(prompt);
+                    userChoice = myKeyboard.readLine().trim().toUpperCase();
+                    
+                    // space between letter 'Z' and square brackets ']' in case the user types two words   
+                    if(!userChoice.matches("[a-zA-Z ]+") && (!userChoice.equals("Y")) && (!userChoice.equals("N"))){
+                        System.err.println("Only Letters Allowed. Please try again!");
                         valid=false;
                     }
-
-                     else if (userChoice.equals("Y")){
-                         do{
-                                 try{
+                    
+                     // if user enters ( Y )
+                    else if (userChoice.equals("Y")){
+                            
+                            // ANOTHER do while within if statement
+                            do{
+                                try{
                                     System.out.println("What percentage are you paying on your Pension Scheme?");
                                     getUserpension = Double.parseDouble(myKeyboard.readLine());
-                                         
+
                                     //check that the value is allowed by checking range
                                     if (getUserpension <=0){
                                         System.err.println("Invalid value entered. Please enter a number greater than ZERO");
                                         userPension=false;
                                      } 
-
                                     //must be OK
-                                    else { 
-                                                                                  
+                                    else {                                      
                                          PensionResults = getUserpension * salary / 100; 
                                          userPension = true;
                                      }
-                                 }catch(Exception e){
+                                }catch(Exception e){
                                         // this will be if the parseInt threw an error -- so the user did not enter a number
                                         System.err.println("Only Numbers. Please try again!");  
                                 } 
-                                }while ((!userPension) );
-                        valid=true;
+                            }while ((!userPension));
+                            valid=true; // MUST be ok
                      }
                      
-                     else if (userChoice.equals("N")){
+                    // if user enters ( N )
+                    else if (userChoice.equals("N")){
                             System.out.println("No pension contribution for this period");
                             valid=true;
-                    } 
-                     
+                    }
+                    
+                    // if user enters neither N or Y
+                    else if (!valid){
+                            System.err.println("Only  Y (YES) or  N (NO) allowed. Please try Again!");
+                            valid=false;
+                    }
                      
                    }catch(Exception e){
                         // this will be if the parseInt threw an error -- so the user did not enter a number   
                     System.err.println("Something went Wrong. Please try Again!");  
                    }
-                
-                }while ((!valid));//(!userChoice.equals("Y"));
-            
-            /*do{
-               
-                 // getting input from the user Y/N
-                 userChoice = myKeyboard.readLine().toUpperCase().trim();//in case the user types lower case and press space
-                   
-                    // VALIDATE Yes or No for the user
-                    // If user chooses Y, then (case "Y") is executed
-                    // If user chooses N, then (case "N") carry on with the program 
-                    //-------USER CHOICE IS ( YES )---------    
-                    if (!userChoice.equals("Y")){ 
-                            valid = false;
-                             do{
-                                 try{
-                                    System.out.println("What percentage are you paying on your Pension Scheme?");
-                                    getUserpension = Double.parseDouble(myKeyboard.readLine());
-                                         
-                                    //check that the value is allowed by checking range
-                                    if (getUserpension <=0){
-                                        System.err.println("Invalid value entered. Please enter a number greater than ZERO");
-                                        userPension=false;
-                                     } 
-
-                                    //must be OK
-                                    else { 
-                                                                                  
-                                         PensionResults = getUserpension * salary / 100; 
-                                         userPension = true;
-                                     }
-                                 }catch(Exception e){
-                                        // this will be if the parseInt threw an error -- so the user did not enter a number
-                                        System.err.println("Only Numbers. Please try again!");  
-                                } 
-                                }while ((!userPension) );
-                             
-                             valid = true;
-                    }
-                          //----------------------------------------------------------------------------------- 
-                               
-                  
-                           
-                         //-------USER CHOICE IS ( NO )---------    
-                           else{
-                            System.out.println("No pension contribution for this period");
-                            valid = false;
-                    } 
-                        // two decimal number formating    
-                        PensionResults = Math.round(PensionResults * 100);
-                        PensionResults = PensionResults/100;
-                        
-                           
-            }while (!valid); */
+                }while (!valid);   
         return PensionResults;
         }
         
@@ -396,8 +356,9 @@ import java.util.Scanner;
                     System.out.println("Enter Tax Credits for " + companyName );
                    
                     // call method get user Double
-                    amount = getUserDouble(); 
-
+                    //Utilities userTax = new Utilities();
+                    amount = getUserDouble();
+                   
                 }catch(Exception e){
                    // this will be if the parseInt threw an error -- so the user did not enter a number
                     System.err.println("Only numbers.Please try again!");  
@@ -405,17 +366,16 @@ import java.util.Scanner;
                         if( this.singlePersonTaxCredits >= amount ) {
                             
                             this.singlePersonTaxCredits = this.singlePersonTaxCredits - amount;
-                            remainingBalnce = this.singlePersonTaxCredits; // stores the remaining Tax Credits
+                            //remainingBalnce = this.singlePersonTaxCredits; // stores the remaining Tax Credits
                             
-                            System.out.println("Remaining Tax Credits : " + remainingBalnce + "\n");
+                            //System.out.println("Remaining Tax Credits : " + remainingBalnce + "\n");
                             break; // will stop the loop if there is anough Tax Credits           
                         }
                         else {
                             System.err.println("Not enough Tax Credits");
                         }
              }while((amount > remainingBalnce)); 
-             
-             return amount;
+          return amount;
         }
         
      
@@ -433,14 +393,14 @@ import java.util.Scanner;
          * @return  amount
          * Get user input to set the Tax Credit validation 
          */
-        public double MarriedPersonTaxCreditBalance(String companyName, double amount){
+        public double MarriedPersonTaxCreditBalance(String[] companyName, double amount){
             
             double remainingBalnce = 0;
              
              do{ 
                 try {
                     System.out.println("Enter Tax Credits for " + companyName );
-                    amount = getUserInt(); // call method get user input
+                   // amount = getUserInt(); // call method get user input
 
                 }catch(Exception e){
                 // this will be if the parseInt threw an error -- so the user did not enter a number
@@ -458,124 +418,138 @@ import java.util.Scanner;
                             System.err.println("Not enough Tax Credits");
                         }
              }while((amount > remainingBalnce)); 
-             
-             return amount;
+         return amount;
        }
-
-
+        
         /**
          * @return the amount of (TAX Credits) left 
          */
         public double getMarriedPersonTaxCredits() {
              return marriedPersonTaxCredits;
          } 
+
+ 
         
         
         /**
-        * If not valid, keep asking
-        * @param prompt -- the number to the user
-        * @return -- valid user input
-        */
-        public int getUserInt(){
+ * Common Input Tasks 
+ * Includes:
+ * KEYBOARD INPUT UTILITIES
+ * getUserText
+ * getUserInt - with a range
+ * getUserInt - with a minimum
+ * getUserDouble - with a range
+ * @author Franklin
+ */
 
-            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+ 
+    /**
+     * Get some text from the user (via keyboard)
+     * @param prompt -- the message or request to the user
+     * @return - the users input as a String
+     * If user does not enter text, output an error and ask them again
+     */
+     public String getUserText (String prompt){
 
-            boolean valid = false;
-            int userInput=-1; //defaulted to -1 because it needs to have a value for validating
+        BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
 
-                do{     
-                    try {
-                        userInput = Integer.parseInt(myKeyboard.readLine());
+        boolean valid=false;
+        String userInput ="";
 
-                        //check that the value is allowed by checking range
-                        if (userInput <=0){
-                            System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
-                        }
-                        else {
-                            //must be OK
-                            valid = true;
-                        }
-                    }catch(Exception e){
-                        // this will be if the parseInt threw an error -- so the user did not enter a number
-                        System.err.println("Only numbers.Please try again!");  
-                    }    
-                }while (!valid);
+            //prompt user until input is valid
+            do{  
+               try {
 
-                //userInput must be int now
-                return (userInput);  
-        }
-        
-        
-        /**
-        * If not valid, keep asking
-        * @return -- valid user input
-        */
-        public double getUserDouble(){
+                System.out.println(prompt); 
+                userInput = myKeyboard.readLine().trim();
 
-            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
-            boolean valid = false;
-            double userInput=-1; //defaulted to -1 because it needs to have a value for validating
+                 // space between letter 'Z' and square brackets ']' in case the user types two words   
+                 if(!userInput.matches("[a-zA-Z ]+")){
+                    System.err.println("Only Letters Allowed.Please try again!");  
+                    valid=false;
+                }
 
-                do{     
-                    try {
-                        userInput = Double.parseDouble(myKeyboard.readLine());
+                 else{
+                    valid=true;
+                 }
+               }catch(Exception e){
+                    // this will be if the parseInt threw an error -- so the user did not enter a number   
+                System.err.println("Something went Wrong. Please try Again!");  
+               }
+            // space between letter 'Z' and square brackets ']' in case the user types two words 
+            }while (!userInput.matches("[a-zA-Z ]+"));
 
-                        //check that the value is allowed by checking range
-                        if (userInput <= 0){
-                            System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
-                        }
-                        else {
-                            //must be OK
-                            valid = true;
-                        }
-                    }catch(Exception e){
-                        // this will be if the parseInt threw an error -- so the user did not enter a number
-                        System.err.println("Only numbers!!!");  
-                    }    
-                }while (!valid);
-
-                //userInput must be double now
-                return (userInput);  
-           }
-
-
-        /**
-         * Get some text from the user (via keyboard)
-         * @param prompt -- the message or request to the user
-         * @return - the users input as a String
-         * If user does not enter text, output an error and ask them again
-         */
-        public String getUserText (String prompt){
-
-            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
-
-            boolean valid=false;
-            String userInput ="";
-
-                //prompt user until input is valid
-                do{  
-                   try {
-
-                    System.out.println(prompt); 
-                    userInput = myKeyboard.readLine().trim();
-
-                     // space between letter 'Z' and square brackets ']' in case the user types two words   
-                     if(!userInput.matches("[a-zA-Z ]+")){
-                        System.err.println("Only Letters Allowed.Please try again!");  
-                        valid=false;
-                    }
-
-                     else{
-                        valid=true;
-                     }
-                   }catch(Exception e){
-                        // this will be if the parseInt threw an error -- so the user did not enter a number   
-                    System.err.println("Something went Wrong. Please try Again!");  
-                   }
-                // space between letter 'Z' and square brackets ']' in case the user types two words 
-                }while (!userInput.matches("[a-zA-Z ]+"));
-
-                //userInput must be text now
-                return (userInput);
-        }
+            //userInput must be text now
+            return (userInput);
     }
+    
+    
+    /**
+     * Ask user to input an number within a range and return an integer value
+     * If not valid, keep asking
+     * @return -- valid user input
+     */
+     public int getUserInt(){
+
+           BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+
+           boolean valid = false;
+           int userInput=-1; //defaulted to -1 because it needs to have a value for validating
+
+               do{     
+                   try {
+                       userInput = Integer.parseInt(myKeyboard.readLine());
+
+                       //check that the value is allowed by checking range
+                       if (userInput <=0){
+                           System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
+                       }
+                       else {
+                           //must be OK
+                           valid = true;
+                       }
+                   }catch(Exception e){
+                       // this will be if the parseInt threw an error -- so the user did not enter a number
+                       System.err.println("Only numbers.Please try again!");  
+                   }    
+               }while (!valid);
+
+            //userInput must be int now
+            return (userInput);  
+       }  
+    
+ 
+    /**
+     * If not valid, keep asking
+     * @return a valid double (includes decimals)
+     */
+     public double getUserDouble(){
+
+         BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+         boolean valid = false;
+         double userInput=-1; //defaulted to -1 because it needs to have a value for validating
+
+             do{     
+                 try {
+                     userInput = Double.parseDouble(myKeyboard.readLine());
+
+                     //check that the value is allowed by checking range
+                     if (userInput <= 0){
+                         System.err.println("Invalid value entered. Please enter a number greater than ZERO");    
+                     }
+                     else {
+                         //must be OK
+                         valid = true;
+                     }
+                 }catch(Exception e){
+                     // this will be if the parseInt threw an error -- so the user did not enter a number
+                     System.err.println("Only numbers!!!");  
+                 }    
+             }while (!valid);
+
+             //userInput must be double now
+             return (userInput);  
+     }
+
+    }
+    

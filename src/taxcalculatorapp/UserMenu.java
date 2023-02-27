@@ -1,5 +1,6 @@
 
 package taxcalculatorapp;
+import Utilities.Utilities;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,7 +15,7 @@ public class UserMenu {
     
     int selectedOption=0; 
     
-     public void MainMenu() throws IOException{
+     public void userMenu() throws IOException{
         
         BufferedReader kb = new BufferedReader(new InputStreamReader(System.in));          
         int userChoice = 0; // Gets user input
@@ -46,7 +47,8 @@ public class UserMenu {
             }
         
             // calling method to get users INT and initializing the return type to zero
-            Tax getUserInput = new Tax(); 
+            Utilities getUserInput = new Utilities();
+            
             selectedOption = getUserInput.getUserInt();
         
             if ( selectedOption == 1){
