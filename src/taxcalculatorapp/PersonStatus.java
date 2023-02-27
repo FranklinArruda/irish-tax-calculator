@@ -1,6 +1,6 @@
 
     package taxcalculatorapp;
-import Utilities.Utilities;
+    import Utilities.Utilities;
     import java.io.IOException;
     import java.text.DecimalFormat;
 
@@ -21,10 +21,11 @@ import Utilities.Utilities;
          */
         public void SinglePersonTax() throws IOException{
  
-          
-            Tax userInt = new Tax(); // call method get user int
-            Tax userText = new Tax(); // call method get user text
-            Tax userDouble = new Tax(); // call method get user double
+            // USING UTILITIES CLASS FOR GETTING USER INPUT
+            Utilities userInt = new Utilities();    // call method get user int 
+            Utilities userDouble = new Utilities(); // call method get user text
+            Utilities userText = new Utilities();   // call method get user double
+           
             Tax weeklyLimit = new Tax(); // call weekly pay limit method
             Tax fortnightlyPayLimit = new Tax(); // call fortnightly pay limit method
             Tax monthlyPayLimit = new Tax(); //// call monthly pay limit method
@@ -53,8 +54,8 @@ import Utilities.Utilities;
                 for(int i=0; i<companyName.length; i++) {
         
                     //method to get USERs Tax Credits 
-                    double userTax = userDouble.SinglePersonTaxCreditBalance(companyName[i],0);
-                    System.out.println("REMAINING TAX " + userDouble.getSinglePersonTaxCredits());
+                    double userTax = getTaxCredits.SinglePersonTaxCreditBalance(companyName[i],0);
+                    System.out.println("REMAINING TAX " + getTaxCredits.getSinglePersonTaxCredits());
                       
                     // Payment frequency menu   
                     String userMenu = "How often are getting paid by " + companyName[i] + " ? \n"
@@ -75,16 +76,12 @@ import Utilities.Utilities;
                    double monthlyGrossPay = 0; // storing monthly pay
                    double hoursFortnightly = 0;
                    double monthlyHours = 0;
-                    
-          
-            
-            
-               
+           
                         // --------- PAYMENT FREQUENCY STATEMENT --------------
                     switch (paymentFrequency){
-
-                        //----- WEEKLY PAYMENT ---------
+                        
                         case 1:
+                             //------------- WEEKLY PAYMENT ---------
                             
                             //-------------- REGULAR TAX DEDUCTION at 20% ---------------
                             
@@ -125,7 +122,6 @@ import Utilities.Utilities;
 
                         //6) finding the salary per hour
                         double hourlyPaid = weeklyGrossPay / weeklyHours;
-
 
                         //-------------- EMERGENCY TAX DEDUCTION at 40% ---------------
 

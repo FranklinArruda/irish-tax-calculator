@@ -3,7 +3,7 @@
                 import java.io.IOException;
 
                 /**
-                 * @author STUDENT
+                 * @author FRANKLIN
                  */
                 public class TaxCalculatorApp {
 
@@ -14,21 +14,6 @@
        
                         UserMenu main = new UserMenu();
                         main.userMenu();
-                                       
-                        //PersonStatus single = new PersonStatus();
-                        //single.SinglePersonTax();
-                        /* 
-                        Tax userPension = new Tax();
-                        
-                        System.out.println("Are you in any Pension Scheme? \n"
-                                    +"--------------------------\n"
-                                    +"Enter: Y (YES) to proceed \n"
-                                    +"Enter: N (No) if not sure:");
-                            double weeklyPension = userPension.getPension(850);  
-                        
-                            System.out.println(weeklyPension);
                        
-                       //userPension.getUserText("enter something");
-                    */
                     }
                 }
