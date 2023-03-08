@@ -50,7 +50,7 @@
                 } 
                 
                             
-            //--------READING company name through numbers of employers
+                //--------READING company name through numbers of employers
                 for(int i=0; i<companyName.length; i++) {
         
                     //method to get USERs Tax Credits 

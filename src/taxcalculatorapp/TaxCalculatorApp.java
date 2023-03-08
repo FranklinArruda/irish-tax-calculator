@@ -12,8 +12,8 @@
                      */
                     public static void main(String[] args) throws IOException {
        
-                        UserMenu main = new UserMenu();
-                        main.userMenu();
+                        UserMenu menu_1 = new UserMenu();
+                        menu_1.userGreetings();
                        
                     }
                 }

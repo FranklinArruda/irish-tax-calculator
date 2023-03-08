@@ -1,6 +1,6 @@
 
     package taxcalculatorapp;
-import Utilities.Utilities;
+    import Utilities.Utilities;
     import java.io.BufferedReader;
     import java.io.InputStreamReader;
     import java.util.Scanner;
@@ -11,13 +11,13 @@ import Utilities.Utilities;
     public class Tax {
     
         // Setting up Attributes 
-        private double singlePersonRateBand;
-        private double marriedPersonRateBand;
+        private double singlePersonRateBand;  // ENUM
+        private double marriedPersonRateBand; // ENUM
         private double singlePersonTaxCredits;
         private double marriedPersonTaxCredits;
-        private int regularTax;
-        private double emergencyTax;
-        private double PRSI;
+        private int regularTax;// ENUM
+        private double emergencyTax;// ENUM
+        private double PRSI;// ENUM
 
 
         // default constructor (initialised)  
@@ -33,6 +33,7 @@ import Utilities.Utilities;
   
         
         /**
+         * Pay Related Social Insurance (PRSI)
          * it calculates 4% from income over 352 per week
          * @param salary that holds the variable of weekly payment
          * @return Deducted salary
@@ -52,6 +53,7 @@ import Utilities.Utilities;
         
         
         /**
+         * Universal Social Charge (USC)
          * Use Utilities class to get user input 
          * It calculates USC Based on the user input
          * If gross income for the year is up to 12.012,01 ( taxed at 0.5% )
@@ -62,6 +64,8 @@ import Utilities.Utilities;
          * @return USC results
          */
         public double getUSC(double salary, String companyName) {
+            
+          
             
             double incomeBand_1 = 0.5; // Up to €12,012.01  at 0.5%
             double incomeBand_2 = 2;  // From €12,012.01 at 2%
@@ -80,19 +84,19 @@ import Utilities.Utilities;
                     do{
                         // it calculates income up to 12,012.00 a year at (0,5%)
                         // it must be higher than 0
-                        if ((getUserUSC <12012)){ 
+                        if ((getUserUSC <USC.USC_A.deduction)){ // ENUM
                             USC_results = (incomeBand_1 * salary / 100);
                             valid = true;//must be OK
                         }
 
                         // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
-                        else if ((getUserUSC >12012) && (getUserUSC <22920)){
+                        else if ((getUserUSC >USC.USC_A.deduction) && (getUserUSC <USC.USC_B.deduction)){ // ENUM
                             USC_results = (incomeBand_2 * salary / 100);
                             valid = true;//must be OK
                         }
 
                         // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
-                        else if ((getUserUSC >22920) && (getUserUSC <70044)){
+                        else if ((getUserUSC >USC.USC_B.deduction) && (getUserUSC <USC.USC_C.deduction)){ // ENUM
                             USC_results = (incomeBand_3 * salary / 100);
                             valid = true;//must be OK
                         }
@@ -112,6 +116,7 @@ import Utilities.Utilities;
  
        
         /**
+         * Pension Scheme
          * Calculates Pension Scheme against user input
          * VALIDATE Yes or No for the user
          * If user chooses Y, then (case "Y") is executed
@@ -193,7 +198,9 @@ import Utilities.Utilities;
         }
         
         
-        /**
+        /** 
+         * Income being TAXED AT 20% (Regular Tax)
+         *  Exceeds the weekly limit which is (Rate Band 1 divided by weeks of the year)
          * @param salary that holds the salary value when method is called
          * @return gross deductions taxed at 20%
          */
@@ -212,7 +219,7 @@ import Utilities.Utilities;
         
         
         /**
-         * 
+         * Income being TAXED AT 40% (Emergency Tax)
          * @param remainingBalance that holds the salary value when method is called
          * @return gross deductions taxed at 40%
          */

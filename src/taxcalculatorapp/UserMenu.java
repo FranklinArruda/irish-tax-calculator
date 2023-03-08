@@ -1,9 +1,7 @@
 
 package taxcalculatorapp;
 import Utilities.Utilities;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -13,18 +11,20 @@ import java.util.GregorianCalendar;
  */
 public class UserMenu {
     
-    int selectedOption=0; 
+    private int selectedOption; 
     
-     public void userMenu() throws IOException{
-        
-        BufferedReader kb = new BufferedReader(new InputStreamReader(System.in));          
-        int userChoice = 0; // Gets user input
-        
+    // default construtor
+    UserMenu(){
+        this.selectedOption=0;
+    }
+    
+     public void userGreetings() throws IOException{
+              
         // getting current time to greeting the user
         GregorianCalendar time = new GregorianCalendar();
         int hour = time.get(Calendar.HOUR_OF_DAY);
 
-         // Main users MENU
+        // Main users MENU
         String userOption ="Please Choose: " + "\n"
                 + "------------------" + "\n"
                 + "1: Tax Calculation" + "\n"
@@ -51,7 +51,7 @@ public class UserMenu {
             
             selectedOption = getUserInput.getUserInt();
         
-            if ( selectedOption == 1){
+            if (selectedOption == 1){
                 String userMenu ="What is your Status:" + "\n"
                     + "------------" + "\n"
                     + "1: Single" + "\n"
