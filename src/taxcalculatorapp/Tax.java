@@ -3,7 +3,8 @@
     import Utilities.Utilities;
     import java.io.BufferedReader;
     import java.io.InputStreamReader;
-    import java.util.Scanner;
+    import Enums.USC;
+   
 
     /**
      * @author FRANKLIN
@@ -64,8 +65,14 @@
          * @return USC results
          */
         public double getUSC(double salary, String companyName) {
+           
+            USC A = USC.USC_A;
+            USC B = USC.USC_B;
+            USC C = USC.USC_C;
             
-          
+            A.getDeduction();
+            B.getDeduction();
+            C.getDeduction();
             
             double incomeBand_1 = 0.5; // Up to €12,012.01  at 0.5%
             double incomeBand_2 = 2;  // From €12,012.01 at 2%
@@ -84,19 +91,19 @@
                     do{
                         // it calculates income up to 12,012.00 a year at (0,5%)
                         // it must be higher than 0
-                        if ((getUserUSC <USC.USC_A.deduction)){ // ENUM
+                        if ((getUserUSC < A.getDeduction())){ // ENUM
                             USC_results = (incomeBand_1 * salary / 100);
                             valid = true;//must be OK
                         }
 
                         // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
-                        else if ((getUserUSC >USC.USC_A.deduction) && (getUserUSC <USC.USC_B.deduction)){ // ENUM
+                        else if ((getUserUSC > A.getDeduction()) && (getUserUSC < B.getDeduction())){ // ENUM
                             USC_results = (incomeBand_2 * salary / 100);
                             valid = true;//must be OK
                         }
 
                         // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
-                        else if ((getUserUSC >USC.USC_B.deduction) && (getUserUSC <USC.USC_C.deduction)){ // ENUM
+                        else if ((getUserUSC > B.getDeduction()) && (getUserUSC < C.getDeduction())){ // ENUM
                             USC_results = (incomeBand_3 * salary / 100);
                             valid = true;//must be OK
                         }
