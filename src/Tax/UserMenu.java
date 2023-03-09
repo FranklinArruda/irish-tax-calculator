@@ -1,5 +1,6 @@
 
-package taxcalculatorapp;
+package Tax;
+import taxcalculatorapp.*;
 import Utilities.Utilities;
 import java.io.IOException;
 import java.util.Calendar;
@@ -11,12 +12,14 @@ import java.util.GregorianCalendar;
  */
 public class UserMenu {
     
-    private int selectedOption; 
+    int selectedOption; 
+   
     
     // default construtor
-    UserMenu(){
+    /*UserMenu(){
         this.selectedOption=0;
-    }
+    }*/
+    
     
      public void userGreetings() throws IOException{
               

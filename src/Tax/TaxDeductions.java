@@ -1,5 +1,5 @@
 
-    package taxcalculatorapp;
+    package Tax;
     import Utilities.Utilities;
     import java.io.BufferedReader;
     import java.io.InputStreamReader;
@@ -9,7 +9,7 @@
     /**
      * @author FRANKLIN
      */
-    public class Tax {
+    public class TaxDeductions {
     
         // Setting up Attributes 
         private double singlePersonRateBand;  // ENUM
@@ -22,7 +22,7 @@
 
 
         // default constructor (initialised)  
-        public Tax(){
+        public TaxDeductions(){
             this.singlePersonRateBand = 40000;
             this.marriedPersonRateBand = 49000;
             this.singlePersonTaxCredits = 3500;
@@ -66,10 +66,12 @@
          */
         public double getUSC(double salary, String companyName) {
            
+            // Enums OBJECTS
             USC A = USC.USC_A;
             USC B = USC.USC_B;
             USC C = USC.USC_C;
             
+            // Getting enums deduction and putting in the if/else (stataement) to validate
             A.getDeduction();
             B.getDeduction();
             C.getDeduction();
@@ -206,8 +208,8 @@
         
         
         /** 
-         * Income being TAXED AT 20% (Regular Tax)
-         *  Exceeds the weekly limit which is (Rate Band 1 divided by weeks of the year)
+         * Income being TAXED AT 20% (Regular TaxDeductions)
+  Exceeds the weekly limit which is (Rate Band 1 divided by weeks of the year)
          * @param salary that holds the salary value when method is called
          * @return gross deductions taxed at 20%
          */
@@ -226,7 +228,7 @@
         
         
         /**
-         * Income being TAXED AT 40% (Emergency Tax)
+         * Income being TAXED AT 40% (Emergency TaxDeductions)
          * @param remainingBalance that holds the salary value when method is called
          * @return gross deductions taxed at 40%
          */
@@ -247,7 +249,7 @@
         /**
          * 
          * @param weeklyTaxCrdits
-         * @return weekly Tax Credits
+         * @return weekly TaxDeductions Credits
          */
         public double getWeeklyTaxCredits(double weeklyTaxCrdits) {
 
@@ -284,7 +286,7 @@
         /**
          * 
          * @param fortnightlyTaxCrdits
-         * @return Fortnightly Tax Credits
+         * @return Fortnightly TaxDeductions Credits
          */
         public double getFortnightlyTaxCredits(double fortnightlyTaxCrdits) {
 
@@ -322,7 +324,7 @@
         /**
          * 
          * @param MonthlyTaxCredits
-         * @return monthly Tax Credits
+         * @return monthly TaxDeductions Credits
          */
         public double getMonthlyTaxCredits(double MonthlyTaxCredits) {
 
@@ -360,7 +362,7 @@
          * @param companyName print out company name  
          * @param amount  
          * @return  amount
-         * Get user input to set the Tax Credit validation by using UTILITIES CLASS
+ Get user input to set the TaxDeductions Credit validation by using UTILITIES CLASS
          */
         public double SinglePersonTaxCreditBalance(String companyName, double amount ){
 
@@ -381,13 +383,17 @@
                         if( this.singlePersonTaxCredits >= amount ) {
                             
                             this.singlePersonTaxCredits = this.singlePersonTaxCredits - amount;
-                            //remainingBalnce = this.singlePersonTaxCredits; // stores the remaining Tax Credits
+                            //remainingBalnce = this.singlePersonTaxCredits; // stores the remaining TaxDeductions Credits
                             
-                            //System.out.println("Remaining Tax Credits : " + remainingBalnce + "\n");
-                            break; // will stop the loop if there is anough Tax Credits           
+                            //System.out.println("Remaining TaxDeductions Credits : " + remainingBalnce + "\n");
+                            break; // will stop the loop if there is anough TaxDeductions Credits           
                         }
                         else {
+
+                            // stores the remaining TaxDeductions Credits
+                            remainingBalnce = this.singlePersonTaxCredits; 
                             System.err.println("Not enough Tax Credits");
+                            System.out.println("This is the Remaining Tax Credits : " + remainingBalnce + " for company " + companyName + "\n");
                         }
              }while((amount > remainingBalnce)); 
           return amount;
@@ -395,7 +401,7 @@
         
      
         /**
-         * @return the remaining Tax Credits
+         * @return the remaining TaxDeductions Credits
          */
         public double getSinglePersonTaxCredits() {
             return singlePersonTaxCredits;
@@ -406,7 +412,7 @@
          * @param companyName print out company name  
          * @param amount  
          * @return  amount
-         * Get user input to set the Tax Credit validation 
+ Get user input to set the TaxDeductions Credit validation 
          */
         public double MarriedPersonTaxCreditBalance(String companyName, double amount){
             
@@ -423,10 +429,10 @@
                          if( this.marriedPersonTaxCredits >= amount ) {
                             
                             this.marriedPersonTaxCredits = this.marriedPersonTaxCredits - amount;
-                            remainingBalnce = this.marriedPersonTaxCredits; // stores the remaining Tax Credits
+                            remainingBalnce = this.marriedPersonTaxCredits; // stores the remaining TaxDeductions Credits
                             
                             System.out.println("Remaining Tax Credits : " + remainingBalnce + "\n");
-                            break; // will stop the loop if there is anough Tax Credits           
+                            break; // will stop the loop if there is anough TaxDeductions Credits           
                         }
                         else {
                             System.err.println("Not enough Tax Credits");

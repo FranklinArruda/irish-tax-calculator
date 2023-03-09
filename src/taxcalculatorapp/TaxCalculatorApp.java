@@ -1,5 +1,6 @@
                
                 package taxcalculatorapp;
+                import Tax.UserMenu;
                 import java.io.IOException;
 
 
@@ -15,6 +16,6 @@
        
                         UserMenu menu_1 = new UserMenu();
                         menu_1.userGreetings();
-                        
+                                              
                     }
                 }
