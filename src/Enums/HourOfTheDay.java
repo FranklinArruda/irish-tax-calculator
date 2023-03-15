@@ -1,13 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
- */
-package Enums;
 
+package Enums;
 /**
  *
  * @author STUDENT
  */
 public enum HourOfTheDay {
     
+    MID_DAY(12),
+    AFTERNOON(17);
+    
+    final int hourOfTheDay;
+    
+    HourOfTheDay(int hourOfTheDay){
+        this.hourOfTheDay = hourOfTheDay;
+    }
+    
+     public int getHour() {
+        return hourOfTheDay;
+    }
 }

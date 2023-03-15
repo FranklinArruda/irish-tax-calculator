@@ -1,10 +1,10 @@
 
-package Tax;
-import taxcalculatorapp.*;
+package Taxes;
 import Utilities.Utilities;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import Enums.HourOfTheDay;
 
 /**
  *
@@ -33,15 +33,15 @@ public class UserMenu {
                 + "1: Tax Calculation" + "\n"
                 + "2: Financial Planning";
 
-            if (hour < 12){
+            if (hour < HourOfTheDay.MID_DAY.getHour()){
              System.out.println("Good Morning!" + "\n" + userOption);
             }
 
-            else if (hour < 17 && !(hour == 12)){
+            else if (hour < HourOfTheDay.AFTERNOON.getHour() && !(hour == HourOfTheDay.AFTERNOON.getHour())){
             System.out.println("Good Afternoon" + "\n" + userOption);
             }
 
-            else if (hour == 12){
+            else if (hour == HourOfTheDay.MID_DAY.getHour()){
             System.out.println("Good Noon" + "\n" + userOption);
             }
 
@@ -79,7 +79,7 @@ public class UserMenu {
                     switch(user){
                         case 1:
                            // System.out.println("Single");
-                            PersonStatus single = new PersonStatus();
+                            UserStatus single = new UserStatus();
                             single.SinglePersonTax();
                             break;
                             

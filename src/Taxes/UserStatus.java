@@ -1,39 +1,41 @@
 
     
-    package Tax;
+    package Taxes;
     import Utilities.Utilities;
-    import java.io.IOException;
     import java.text.DecimalFormat;
 
     /**
      * @author FRANKLIN
      */
-    public class PersonStatus {
+    public class UserStatus implements UserStatusInterface {
             
-        public PersonStatus(){   
-        }
+      //  public UserStatus(){   
+        //}
         
         // Global decimal format to display double in 2 decimal place 
         public static DecimalFormat df = new DecimalFormat("0.00");
 
+        
+        
+        
         /**
          * 
-         * @throws IOException 
          */
-        public void SinglePersonTax() throws IOException{
+        @Override
+        public void SinglePersonTax(){
  
             // USING UTILITIES CLASS FOR GETTING USER INPUT
             Utilities userInt = new Utilities();    // call method get user int 
             Utilities userDouble = new Utilities(); // call method get user text
             Utilities userText = new Utilities();   // call method get user double
            
-            TaxDeductions weeklyLimit = new TaxDeductions(); // call weekly pay limit method
-            TaxDeductions fortnightlyPayLimit = new TaxDeductions(); // call fortnightly pay limit method
-            TaxDeductions monthlyPayLimit = new TaxDeductions(); //// call monthly pay limit method
-            TaxDeductions getTaxCredits = new TaxDeductions(); // call method get weekly, fortnightly and monthly tax credits
-            TaxDeductions PRSI_tax = new TaxDeductions(); // call method get PRSI TaxDeductions
-            TaxDeductions userPension = new TaxDeductions(); // call method get PRSI TaxDeductions
-            TaxDeductions userUSC = new TaxDeductions(); // call method get PRSI TaxDeductions
+            TaxDeduction weeklyLimit = new TaxDeduction(); // call weekly pay limit method
+            TaxDeduction fortnightlyPayLimit = new TaxDeduction(); // call fortnightly pay limit method
+            TaxDeduction monthlyPayLimit = new TaxDeduction(); //// call monthly pay limit method
+            TaxDeduction getTaxCredits = new TaxDeduction(); // call method get weekly, fortnightly and monthly tax credits
+            TaxDeduction PRSI_tax = new TaxDeduction(); // call method get PRSI TaxDeduction
+            TaxDeduction userPension = new TaxDeduction(); // call method get PRSI TaxDeduction
+            TaxDeduction userUSC = new TaxDeduction(); // call method get PRSI TaxDeduction
       
             
             System.out.println("How many employers are you currently working for?");
@@ -54,7 +56,7 @@
                 //--------READING company name through numbers of employers
                 for(int i=0; i<companyName.length; i++) {
         
-                    //method to get USERs TaxDeductions Credits 
+                    //method to get USERs TaxDeduction Credits 
                     double userTax = getTaxCredits.SinglePersonTaxCreditBalance(companyName[i],0);
                     System.out.println("REMAINING TAX " + getTaxCredits.getSinglePersonTaxCredits());
                       
@@ -115,7 +117,7 @@
                         // 3) finding the weekly tax credits
                         double weeklyTaxCredits = getTaxCredits.getWeeklyTaxCredits(userTax);
 
-                        // 4) finding TaxDeductions Payable 20%
+                        // 4) finding TaxDeduction Payable 20%
                         double weeklyTaxPayble_20 = weeklyGrossDeduction - getTaxCredits.getWeeklyTaxCredits(userTax);
 
                         // 5) finding net pay 20%
@@ -212,19 +214,19 @@
                          */
                        /*if (weeklyGrossPay > weeklyPayLimit) {
                             //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                            System.out.println("You are being taxed at (Emergency TaxDeductions) by " + companyName1 + "." + " Understand why by reading the information below \n");
-                            System.out.println("Emergency TaxDeductions is calculaded in four different ways: \n"
+                            System.out.println("You are being taxed at (Emergency TaxDeduction) by " + companyName1 + "." + " Understand why by reading the information below \n");
+                            System.out.println("Emergency TaxDeduction is calculaded in four different ways: \n"
                                     +"1: When you started in your new job and have no PPSN \n"
                                     +"2: When you started in your new Job. You have PPSN, but the first salary will always be taxed at 40% \n"
-                                    +"3: When you are working for multiple employer and you do not have enough TaxDeductions Credits for each employer \n"
-                                    +"4: When you are working for a specific employer and your TaxDeductions Credits is Zero (0)\n");
+                                    +"3: When you are working for multiple employer and you do not have enough TaxDeduction Credits for each employer \n"
+                                    +"4: When you are working for a specific employer and your TaxDeduction Credits is Zero (0)\n");
                             System.out.println("As you are (Single) your RATE BAND is at 40,000.00 a year. That is divided by "
                                     +"52 weeks because you are getting paid weekly \n");
                             System.out.println("Therefore \u20ac " + df.format(weeklyPayLimit) +" is your gross pay (limit) per week "
                                     + "and any value above that limit will be taxed at 40% \n");
                             System.out.println("However, your groos pay is above the 352 weekly which means you also must "
                                     + "pay 4% PRSI of your Gross payment less (PRSI Credits of 12 euros for each payment)");
-                            System.out.println("Your TaxDeductions Credits is Currently \u20ac" + userTax + " divided by "
+                            System.out.println("Your TaxDeduction Credits is Currently \u20ac" + userTax + " divided by "
                                     + "52 Number of weeks = \u20ac" +df.format(weeklyTaxCredits) + " for each gross payment limit on a weekly bases");
                             System.out.println("This \u20ac " + df.format(weeklyTaxCredits) + " only works for the Gross Pay (Limit) as shown below: \n");
                             System.out.println("Your weekly Gross Pay is \u20ac " + df.format(weeklyGrossPay) + " over the limit of \u20ac" + df.format(weeklyPayLimit));
@@ -234,8 +236,8 @@
                             System.out.println("Lastly, the difference between Gross pay & Gross Pay limit is  \u20ac " + df.format(weeklyRemainingBalance)  + " in which is calculate at 40% "
                                     + "and the \u20ac " + df.format(weeklyPayLimit) + " at 20% \n");
                             System.out.println("Then your Gross Pay Limit \u20ac " + df.format(weeklyPayLimit) +" x 20% = "+ "\u20ac " + df.format(weeklyGrossDeduction)
-                                    + " - \u20ac " + df.format(weeklyTaxCredits) + " TaxDeductions Credits = \u20ac " + df.format(weeklyTaxPayble_20) + " TaxDeductions paybale");
-                            System.out.println("Gross Pay (limit) \u20ac " + df.format(weeklyPayLimit)+ " -  \u20ac " + df.format(weeklyTaxPayble_20) + " > TaxDeductions at 20%  = NET PAY at 20 percent \u20ac " + df.format(weeklyNetPay_20) + "\n");
+                                    + " - \u20ac " + df.format(weeklyTaxCredits) + " TaxDeduction Credits = \u20ac " + df.format(weeklyTaxPayble_20) + " TaxDeduction paybale");
+                            System.out.println("Gross Pay (limit) \u20ac " + df.format(weeklyPayLimit)+ " -  \u20ac " + df.format(weeklyTaxPayble_20) + " > TaxDeduction at 20%  = NET PAY at 20 percent \u20ac " + df.format(weeklyNetPay_20) + "\n");
                             System.out.println("We have calculated your Gross Pay limit at Rate Band 1 (20%) \n"
                                     +"We must now calculate the Difference we found at Rate Band 2 (40%) \n");
                             System.out.println("The remainig balance is => \u20ac " + df.format(weeklyRemainingBalance) + " x 40% / 100% =  \u20ac " + df.format(taxPayble_40) + "\n");
@@ -245,7 +247,7 @@
                                     +"USC = \u20ac " + weeklyUSC + "\n"
                                     +"Pension Scheme = \u20ac " + weeklyPension + "\n"
                                     +"Gross pay limit taxed at 20% = \u20ac " + df.format(weeklyTaxPayble_20) + "\n"
-                                    +"Difference between (gross pay) and (gross pay limit) taxed at 40% (Emergency TaxDeductions) = \u20ac " + taxPayble_40 +"\n"
+                                    +"Difference between (gross pay) and (gross pay limit) taxed at 40% (Emergency TaxDeduction) = \u20ac " + taxPayble_40 +"\n"
                                     +"Salary per hour on a weekly bases = \u20ac " + df.format(hourlyPaid) + "\n"
                                     +"TOTAL Deductions = \u20ac " + df.format(TOTAL_Deductions) +"\n" + "\n"
                                     +"Therefore your NET PAY for ( " + companyName1 + " ) is: \u20ac " + df.format(weeklyNetPay) + " for this period \n";
@@ -254,7 +256,7 @@
                         }
                         /**
                          * if weekly payment is less than weekly pay limit, but greater than 352
-                         * (Regular TaxDeductions 20%) + (PRSI 4% applies)
+                         * (Regular TaxDeduction 20%) + (PRSI 4% applies)
                          */
                        /*else if (weeklyGrossPay <= weeklyPayLimit.getWeeklyPayLimit() && (weeklyGrossPay > 352)){
                         
@@ -266,7 +268,7 @@
                         double grossDeduction = weeklyPayLimit.regularTaxDeduction(weeklyGrossPay);
                         System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                         
-                        // 2) finding TaxDeductions Payble
+                        // 2) finding TaxDeduction Payble
                         double taxPayable = grossDeduction - getTaxCredits.getWeeklyTaxCredits(userTax);
                         
                         // 3) finding net pay 20%
@@ -274,7 +276,7 @@
                         
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are not at (Emergency TaxDeductions) by " + companyName[i] + " "
+                        System.out.println("You are not at (Emergency TaxDeduction) by " + companyName[i] + " "
                         + " Understand why by reading the information below " + "\n");
                         
                         System.out.println("Because your Gross Pay is " + df.format(weeklyGrossPay)
@@ -286,10 +288,10 @@
                         System.out.println("First we find the gross deductions of your weekly gross pay "
                         + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
                         
-                        System.out.println("Then we use your current TaxDeductions Credits of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction"
-                        + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeductions Payble" + "\n");
+                        System.out.println("Then we use your current TaxDeduction Credits of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction"
+                        + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeduction Payble" + "\n");
                         
-                        System.out.println("At last, gross payment \u20ac " + df.format(weeklyGrossPay) + " - \u20ac" + df.format(taxPayable) + " TaxDeductions payable "
+                        System.out.println("At last, gross payment \u20ac " + df.format(weeklyGrossPay) + " - \u20ac" + df.format(taxPayable) + " TaxDeduction payable "
                         + " - \u20ac " + df.format(PRSI) + " PRSI");
                         
                         System.out.println("Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period " + "\n");
@@ -297,7 +299,7 @@
                         
                         /**
                          * if weekly payment is less than weekly pay limit and 352 euros
-                         * (Regular TaxDeductions 20%) ONLY
+                         * (Regular TaxDeduction 20%) ONLY
                          */
                        /* else {
                         
@@ -305,7 +307,7 @@
                         double grossDeduction = weeklyPayLimit.regularTaxDeduction(weeklyGrossPay);
                         System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                         
-                        // 2) finding TaxDeductions Payble
+                        // 2) finding TaxDeduction Payble
                         double taxPayable = grossDeduction - getTaxCredits.getWeeklyTaxCredits(userTax);
                         
                         // 3) finding net pay 20%
@@ -313,7 +315,7 @@
                         
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are not being taxed  at (Emergency TaxDeductions) by " + companyName[i] + "."
+                        System.out.println("You are not being taxed  at (Emergency TaxDeduction) by " + companyName[i] + "."
                         + " Understand why by reading the information below " + "\n");
                         
                         System.out.println("Because your Gross Pay is " + df.format(weeklyGrossPay)
@@ -322,8 +324,8 @@
                         System.out.println("First we find the gross deductions of your weekly gross pay "
                         + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
                         
-                        System.out.println("Then we use your current TaxDeductions Credits of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction"
-                        + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeductions Payble" + "\n");
+                        System.out.println("Then we use your current TaxDeduction Credits of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction"
+                        + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeduction Payble" + "\n");
                         
                         System.out.println("At last, tax payble \u20ac " + df.format(taxPayable) + " - \u20ac" + df.format(weeklyGrossPay) + " weekly gross pay");
                         
@@ -346,7 +348,7 @@
                         * check whether user is being taxed at emergency tax
                         * calling get weekly pay limit Method against the weekly gross pay
                         * if fortnightly payment is greater than fortnightly pay limit
-                        * (Regular TaxDeductions 20%) + (Emergency TaxDeductions at 40%) + (PRSI 4% applies)
+                        * (Regular TaxDeduction 20%) + (Emergency TaxDeduction at 40%) + (PRSI 4% applies)
                         */
                        /*   if (fornightlyGrossPay > fortnightlyPayLimit.getFortnightlyPayLimit()){
                         
@@ -368,7 +370,7 @@
                         double currentTaxCredits = getTaxCredits.getFortnightlyTaxCredits(userTax);
                         System.out.println("CURRENT TAX CREDITS OUT OF " + userTax + " = " +  currentTaxCredits);
                         
-                        // 4) finding TaxDeductions Payable 20%
+                        // 4) finding TaxDeduction Payable 20%
                         double taxPayble_20 = grossDeduction - getTaxCredits.getFortnightlyTaxCredits(userTax);
                         System.out.format("TAX at 20 percent = %.2f\n", taxPayble_20);
                         
@@ -392,13 +394,13 @@
                         System.out.format("NET PAY = %.2f\n", NET_PAY);
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are being taxed at (Emergency TaxDeductions) by " + companyName[i] + "."
+                        System.out.println("You are being taxed at (Emergency TaxDeduction) by " + companyName[i] + "."
                         + " Understand why by reading the information below " + "\n");
                         
-                        System.out.println("Emergency TaxDeductions is calculaded in three different ways: " + "\n"
+                        System.out.println("Emergency TaxDeduction is calculaded in three different ways: " + "\n"
                         +"1: When you started in your new job and have no PPSN " + "\n"
                         +"2: When you started in your new Job. You have PPSN, but the first salary will always be taxed at 40%" + "\n"
-                        +"3: When you are working for multiple employer and you do not have enough TaxDeductions Credits for each employer" +"\n");
+                        +"3: When you are working for multiple employer and you do not have enough TaxDeduction Credits for each employer" +"\n");
                         
                         System.out.println("As you are (Single) your RATE BAND is at 40,000.00 a year. That is divided by "
                         +"52 weeks because you are getting paid weekly" + "\n");
@@ -409,7 +411,7 @@
                         System.out.println("However, your groos pay is above the 704 fortnightly which means you also must "
                         + "pay 4% PRSI of your Gross payment less (PRSI Credits of 12 euros for each payment)");
                         
-                        System.out.println("Your TaxDeductions Credits is Currently \u20ac" + userTax + " divided by "
+                        System.out.println("Your TaxDeduction Credits is Currently \u20ac" + userTax + " divided by "
                         + "26 Number of weeks = \u20ac" +df.format(currentTaxCredits) + " for each gross payment limit Fortnightly");
                         
                         System.out.println("This \u20ac " + df.format(currentTaxCredits) + " only works for the Gross Pay (Limit) as shown below:" + "\n");
@@ -422,8 +424,8 @@
                         System.out.println("First, we calculate your gross pay \u20ac " + df.format(fornightlyGrossPay) + " at 4% PRSI = \u20ac " + PRSI);
                         
                         System.out.println("Then your Gross Pay Limit \u20ac " + fortnightlyPayLimit.getFortnightlyPayLimit() +" x 20% = "+ "\u20ac " + df.format(grossDeduction)
-                        + " - \u20ac " + df.format(currentTaxCredits) + " TaxDeductions Credits = \u20ac " + df.format(taxPayble_20) + " TaxDeductions paybale");
-                        System.out.println("Gross Pay (limit) \u20ac " + fortnightlyPayLimit.getFortnightlyPayLimit() + " -  \u20ac " + taxPayble_20 + " > TaxDeductions at 20%  = NET PAY at 20 percent \u20ac " + df.format(netPay_20) + "\n");
+                        + " - \u20ac " + df.format(currentTaxCredits) + " TaxDeduction Credits = \u20ac " + df.format(taxPayble_20) + " TaxDeduction paybale");
+                        System.out.println("Gross Pay (limit) \u20ac " + fortnightlyPayLimit.getFortnightlyPayLimit() + " -  \u20ac " + taxPayble_20 + " > TaxDeduction at 20%  = NET PAY at 20 percent \u20ac " + df.format(netPay_20) + "\n");
                         
                         System.out.println("We have calculated your Gross Pay limit at Rate Band 1 (20%)" + "\n"
                         +"We must now calculate the Difference we found at Rate Band 2 (40%)" + "\n");
@@ -439,7 +441,7 @@
                         
                         /**
                          * if fortnightly payment is less than fortnightly pay limit, but greater than 352
-                         * (Regular TaxDeductions 20%) + (PRSI 4% applies)
+                         * (Regular TaxDeduction 20%) + (PRSI 4% applies)
                          */
                        /*  else if (fornightlyGrossPay <= fortnightlyPayLimit.getFortnightlyPayLimit() && (fornightlyGrossPay > 704)){
                         
@@ -451,7 +453,7 @@
                         double grossDeduction = fortnightlyPayLimit.regularTaxDeduction(fornightlyGrossPay);
                         System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                         
-                        // 2) finding TaxDeductions Payble
+                        // 2) finding TaxDeduction Payble
                         double taxPayable = grossDeduction - getTaxCredits.getFortnightlyTaxCredits(userTax);
                         
                         // 3) finding net pay 20%
@@ -459,7 +461,7 @@
                         
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are not at (Emergency TaxDeductions) by " + companyName[i] + " "
+                        System.out.println("You are not at (Emergency TaxDeduction) by " + companyName[i] + " "
                         + " Understand why by reading the information below " + "\n");
                         
                         System.out.println("Because your Gross Pay is " + df.format(fornightlyGrossPay)
@@ -471,10 +473,10 @@
                         System.out.println("First we find the gross deductions of your fortnightly gross pay "
                         + df.format(fornightlyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
                         
-                        System.out.println("Then we use your current TaxDeductions Credits of  \u20ac " + getTaxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction"
-                        + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeductions Payble" + "\n");
+                        System.out.println("Then we use your current TaxDeduction Credits of  \u20ac " + getTaxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction"
+                        + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeduction Payble" + "\n");
                         
-                        System.out.println("At last, gross payment \u20ac " + df.format(fornightlyGrossPay) + " - \u20ac" + df.format(taxPayable) + " TaxDeductions payable "
+                        System.out.println("At last, gross payment \u20ac " + df.format(fornightlyGrossPay) + " - \u20ac" + df.format(taxPayable) + " TaxDeduction payable "
                         + " - \u20ac " + df.format(PRSI) + " PRSI");
                         
                         System.out.println("Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period " + "\n");
@@ -490,7 +492,7 @@
                         double grossDeduction = fortnightlyPayLimit.regularTaxDeduction(fornightlyGrossPay);
                         System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                         
-                        // 2) finding TaxDeductions Payble
+                        // 2) finding TaxDeduction Payble
                         double taxPayable = grossDeduction - getTaxCredits.getFortnightlyTaxCredits(userTax);
                         
                         // 3) finding net pay 20%
@@ -498,7 +500,7 @@
                         
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are not being taxed  at (Emergency TaxDeductions) by " + companyName[i] + "."
+                        System.out.println("You are not being taxed  at (Emergency TaxDeduction) by " + companyName[i] + "."
                         + " Understand why by reading the information below " + "\n");
                         
                         System.out.println("Because your Gross Pay is " + df.format(fornightlyGrossPay)
@@ -507,8 +509,8 @@
                         System.out.println("First we find the gross deductions of your Fortnightly gross pay "
                         + df.format(fornightlyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
                         
-                        System.out.println("Then we use your current TaxDeductions Credits of  \u20ac " + getTaxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction"
-                        + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeductions Payble" + "\n");
+                        System.out.println("Then we use your current TaxDeduction Credits of  \u20ac " + getTaxCredits.getFortnightlyTaxCredits(userTax) + " less gross deduction"
+                        + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeduction Payble" + "\n");
                         
                         System.out.println("At last, tax payble \u20ac " + df.format(taxPayable) + " - \u20ac" + df.format(fornightlyGrossPay) + " Fortnightly gross pay");
                         
@@ -531,7 +533,7 @@
                          * check whether user is being taxed at emergency tax
                          * calling get weekly pay limit Method against the weekly gross pay
                          * if monthly payment is greater than monthly pay limit 
-                         * (Regular TaxDeductions 20%) + (Emergency TaxDeductions at 40%) + (PRSI 4% applies)
+                         * (Regular TaxDeduction 20%) + (Emergency TaxDeduction at 40%) + (PRSI 4% applies)
                          */
                       /*    if (monthlyGrossPay > monthlyPayLimit.getMonthlyPayLimit()){
                         
@@ -553,7 +555,7 @@
                         double currentTaxCredits = getTaxCredits.getMonthlyTaxCredits(userTax);
                         System.out.println("CURRENT TAX CREDITS OUT OF " + userTax + " = " +  currentTaxCredits);
                         
-                        // 4) finding TaxDeductions Payable 20%
+                        // 4) finding TaxDeduction Payable 20%
                         double taxPayble_20 = grossDeduction - getTaxCredits.getMonthlyTaxCredits(userTax);
                         System.out.format("TAX at 20 percent = %.2f\n", taxPayble_20);
                         
@@ -577,13 +579,13 @@
                         System.out.format("NET PAY = %.2f\n", NET_PAY);
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are being taxed at (Emergency TaxDeductions) by " + companyName[i] + "."
+                        System.out.println("You are being taxed at (Emergency TaxDeduction) by " + companyName[i] + "."
                         + " Understand why by reading the information below " + "\n");
                         
-                        System.out.println("Emergency TaxDeductions is calculaded in three different ways: " + "\n"
+                        System.out.println("Emergency TaxDeduction is calculaded in three different ways: " + "\n"
                         +"1: When you started in your new job and have no PPSN " + "\n"
                         +"2: When you started in your new Job. You have PPSN, but the first salary will always be taxed at 40%" + "\n"
-                        +"3: When you are working for multiple employer and you do not have enough TaxDeductions Credits for each employer" +"\n");
+                        +"3: When you are working for multiple employer and you do not have enough TaxDeduction Credits for each employer" +"\n");
                         
                         System.out.println("As you are (Single) your RATE BAND is at 40,000.00 a year. That is divided by "
                         +"52 weeks because you are getting paid monthly" + "\n");
@@ -594,7 +596,7 @@
                         System.out.println("However, your groos pay is above the 1408 monthly which means you also must "
                         + "pay 4% PRSI of your Gross payment less (PRSI Credits of 12 euros for each payment)");
                         
-                        System.out.println("Your TaxDeductions Credits is Currently \u20ac" + userTax + " divided by "
+                        System.out.println("Your TaxDeduction Credits is Currently \u20ac" + userTax + " divided by "
                         + "12 Number of months = \u20ac" +df.format(currentTaxCredits) + " for each gross payment limit monthly");
                         
                         System.out.println("This \u20ac " + df.format(currentTaxCredits) + " only works for the Gross Pay (Limit) as shown below:" + "\n");
@@ -607,8 +609,8 @@
                         System.out.println("First, we calculate your gross pay \u20ac " + df.format(monthlyGrossPay) + " at 4% PRSI = \u20ac " + PRSI);
                         
                         System.out.println("Then your Gross Pay Limit \u20ac " + monthlyPayLimit.getMonthlyPayLimit() +" x 20% = "+ "\u20ac " + df.format(grossDeduction)
-                        + " - \u20ac " + df.format(currentTaxCredits) + " TaxDeductions Credits = \u20ac " + df.format(taxPayble_20) + " TaxDeductions paybale");
-                        System.out.println("Gross Pay (limit) \u20ac " + monthlyPayLimit.getMonthlyPayLimit() + " -  \u20ac " + taxPayble_20 + " > TaxDeductions at 20%  = NET PAY at 20 percent \u20ac " + df.format(netPay_20) + "\n");
+                        + " - \u20ac " + df.format(currentTaxCredits) + " TaxDeduction Credits = \u20ac " + df.format(taxPayble_20) + " TaxDeduction paybale");
+                        System.out.println("Gross Pay (limit) \u20ac " + monthlyPayLimit.getMonthlyPayLimit() + " -  \u20ac " + taxPayble_20 + " > TaxDeduction at 20%  = NET PAY at 20 percent \u20ac " + df.format(netPay_20) + "\n");
                         
                         System.out.println("We have calculated your Gross Pay limit at Rate Band 1 (20%)" + "\n"
                         +"We must now calculate the Difference we found at Rate Band 2 (40%)" + "\n");
@@ -624,7 +626,7 @@
                         
                         /**
                          * if monthly payment is less than weekly pay limit, but greater than 352
-                         * (Regular TaxDeductions 20%) + (PRSI 4% applies)
+                         * (Regular TaxDeduction 20%) + (PRSI 4% applies)
                          */
                       /*     else if (monthlyGrossPay <= monthlyPayLimit.getMonthlyPayLimit() && (monthlyGrossPay > 1408)){
                         
@@ -636,7 +638,7 @@
                         double grossDeduction = monthlyPayLimit.regularTaxDeduction(monthlyGrossPay);
                         System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                         
-                        // 2) finding TaxDeductions Payble
+                        // 2) finding TaxDeduction Payble
                         double taxPayable = grossDeduction - getTaxCredits.getMonthlyTaxCredits(userTax);
                         
                         // 3) finding net pay 20%
@@ -644,7 +646,7 @@
                         
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are not at (Emergency TaxDeductions) by " + companyName[i] + " "
+                        System.out.println("You are not at (Emergency TaxDeduction) by " + companyName[i] + " "
                         + " Understand why by reading the information below " + "\n");
                         
                         System.out.println("Because your Gross Pay is " + df.format(monthlyGrossPay)
@@ -656,10 +658,10 @@
                         System.out.println("First we find the gross deductions of your monthly gross pay "
                         + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
                         
-                        System.out.println("Then we use your current TaxDeductions Credits of  \u20ac " + getTaxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction"
-                        + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeductions Payble" + "\n");
+                        System.out.println("Then we use your current TaxDeduction Credits of  \u20ac " + getTaxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction"
+                        + " \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeduction Payble" + "\n");
                         
-                        System.out.println("At last, gross payment \u20ac " + df.format(monthlyGrossPay) + " - \u20ac" + df.format(taxPayable) + " TaxDeductions payable "
+                        System.out.println("At last, gross payment \u20ac " + df.format(monthlyGrossPay) + " - \u20ac" + df.format(taxPayable) + " TaxDeduction payable "
                         + " - \u20ac " + df.format(PRSI) + " PRSI");
                         
                         System.out.println("Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period " + "\n");
@@ -667,7 +669,7 @@
                         
                         /**
                          * if monthly payment is less than monthly pay limit and 352 euros
-                         * (Regular TaxDeductions 20%) ONLY
+                         * (Regular TaxDeduction 20%) ONLY
                          */
                       /*   else {
                         
@@ -675,7 +677,7 @@
                         double grossDeduction = monthlyPayLimit.regularTaxDeduction(monthlyGrossPay);
                         System.out.format("GROSS DEDUCTION at 20 percent = %.2f\n", grossDeduction);
                         
-                        // 2) finding TaxDeductions Payble
+                        // 2) finding TaxDeduction Payble
                         double taxPayable = grossDeduction - getTaxCredits.getMonthlyTaxCredits(userTax);
                         
                         // 3) finding net pay 20%
@@ -683,7 +685,7 @@
                         
                         
                         //-------------------- DISPLAYING MESSAGE AND HOW IT WORKS --------------------
-                        System.out.println("You are not being taxed  at (Emergency TaxDeductions) by " + companyName[i] + "."
+                        System.out.println("You are not being taxed  at (Emergency TaxDeduction) by " + companyName[i] + "."
                         + " Understand why by reading the information below " + "\n");
                         
                         System.out.println("Because your Gross Pay is " + df.format(monthlyGrossPay)
@@ -692,8 +694,8 @@
                         System.out.println("First we find the gross deductions of your monthly gross pay "
                         + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(grossDeduction));
                         
-                        System.out.println("Then we use your current TaxDeductions Credits of  \u20ac " + getTaxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction"
-                        + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeductions Payble" + "\n");
+                        System.out.println("Then we use your current TaxDeduction Credits of  \u20ac " + getTaxCredits.getMonthlyTaxCredits(userTax) + " less gross deduction"
+                        + "  \u20ac" + df.format(grossDeduction) + " = \u20ac " + df.format(taxPayable) + " TaxDeduction Payble" + "\n");
                         
                         System.out.println("At last, tax payble \u20ac " + df.format(taxPayable) + " - \u20ac" + df.format(monthlyGrossPay) + " monthly gross pay");
                         
@@ -703,6 +705,11 @@
                 }
             }
         }
+
+    @Override
+    public void MarriedPersonTax() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     }
         
 
