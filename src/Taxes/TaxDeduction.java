@@ -11,43 +11,28 @@
      * @author FRANKLIN
      */
     public class TaxDeduction implements TaxDeductionInterface {
+        
+        // GLOBAL INT PERCENTAGE 100 as helper for the calculation
+        static final int PERCENTAGE = 100;
          
-        /**
-         * Pay Related Social Insurance (PRSI)
-         * Enumerated OBJECTS to get PRSI
-         * it calculates 4% from income over 352 per week
-         * @param salary that holds the variable of weekly payment
-         * @return Deducted salary
-         */
         @Override
         public double getPRSI(double salary) {
 
             int PRSI = Tax.PRSI.getTax(); // Enum Object
            
             double taxRate_4 = 4;
-            double PRSIresults = taxRate_4 * salary / 100 - PRSI;
+            double PRSIresults = taxRate_4 * salary / PERCENTAGE - PRSI;
 
             // two decimal number formating    
-            PRSIresults = Math.round(PRSIresults * 100);
-            PRSIresults = PRSIresults/100;
+            PRSIresults = Math.round(PRSIresults * PERCENTAGE);
+            PRSIresults = PRSIresults / PERCENTAGE;
 
         return PRSIresults;
         }
-          
         
-        
-        /**
-         * Universal Social Charge (USC_Income_Bands)
-         * Use Utilities class to get user input 
-         * It calculates USC_Income_Bands Based on the user input
-         * Enumerated OBJECTS to get USC Rate bands as well as USC percentage deduction
-         * If gross income for the year is up to 12.012,01 ( taxed at 0.5% )
-         * If gross income for the year is above 12.000,01 ( taxed at 2% )
-         * If gross income for the year is in between 22,9920.01 and 70,044,00 ( taxed at 4.5% )
-         * @param salary to assign the result from the main
-         * @param companyName
-         * @return USC_Income_Bands results
-         */
+        //======================================================================== 
+                
+        @Override
         public double getUSC(double salary, String companyName) {
            
             double USC_results = 0; // USC_Income_Bands results
@@ -64,26 +49,26 @@
                     // it calculates income up to 12,012.00 a year at (0,5%)
                     // it must be higher than 0
                     if ((getUserUSC < USC_IncomeBand.USC_BAND_1.getUSC_Band())){ // Enums OBJECTS
-                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / 100);
+                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / PERCENTAGE);
                         valid = true;//must be OK
                     }
 
                     // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
                     else if ((getUserUSC > USC_IncomeBand.USC_BAND_2.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_BAND_2.getUSC_Band())){ // ENUM
-                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / 100);
+                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / PERCENTAGE);
                         valid = true;//must be OK
                     }
 
                     // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
                     // Enums OBJECTS
                     else if ((getUserUSC > USC_IncomeBand.USC_BAND_3.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_BAND_3.getUSC_Band())){ // ENUM
-                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / 100);
+                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / PERCENTAGE);
                         valid = true;//must be OK
                     }
 
                     // two decimal number formating   
-                    getUserUSC = Math.round(getUserUSC * 100);
-                    getUserUSC = getUserUSC/100;
+                    getUserUSC = Math.round(getUserUSC * PERCENTAGE);
+                    getUserUSC = getUserUSC / PERCENTAGE;
 
                 }while (!valid);   
 
@@ -94,17 +79,9 @@
         return USC_results;
         }
  
+        //======================================================================== 
        
-        
-        /**
-         * Pension Scheme
-         * Calculates Pension Scheme against user input
-         * VALIDATE Yes or No for the user
-         * If user chooses Y, then (case "Y") is executed
-         * If user chooses N, then (case "N") carry on with the program 
-         * @param salary as parameter
-         * @return pension results
-         */
+        @Override
         public double getPension(double salary){
 
            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
@@ -147,7 +124,7 @@
                                      } 
                                     //must be OK
                                     else {                                      
-                                         PensionResults = getUserpension * salary / 100; 
+                                         PensionResults = getUserpension * salary / PERCENTAGE; 
                                          userPension = true;
                                      }
                                 }catch(Exception e){
@@ -178,77 +155,57 @@
         return PensionResults;
         }
         
+        //======================================================================== 
         
-        /** 
-         * Income being TAXED AT 20% (Regular TaxDeduction)
-         * Exceeds the weekly limit which is (Rate Band 1 divided by weeks of the year)
-         * @param salary that holds the salary value when method is called
-         * @return gross deductions taxed at 20%
-         */
         @Override
         public double regularTaxDeduction(double salary){
             
             int RegularTax = Tax.REGULAR_TAX.getTax(); // Enum Object
             
-            // finding gross deductions (Gross pay * 20% / 100%)
-            int percentage = 100;                    
-            double regularTaxDeduction =  salary * RegularTax / percentage;
+            // finding gross deductions (Gross pay * 20% / 100%)                  
+            double regularTaxDeduction =  salary * RegularTax / PERCENTAGE;
             
             // two decimal number formating    
-            regularTaxDeduction = Math.round(regularTaxDeduction * percentage);
-            regularTaxDeduction = regularTaxDeduction / percentage;
+            regularTaxDeduction = Math.round(regularTaxDeduction * PERCENTAGE);
+            regularTaxDeduction = regularTaxDeduction / PERCENTAGE;
                                
             return regularTaxDeduction;
         }
         
+        //======================================================================== 
         
-        /**
-         * Income being TAXED AT 40% (Emergency TaxDeduction)
-         * @param remainingBalance that holds the salary value when method is called
-         * @return gross deductions taxed at 40%
-         */
         @Override
         public double emergencyTaxDeduction(double remainingBalance){
             
             int EmergencyTax = Tax.EMERGENCY_TAX.getTax(); // Enum Object
             
-            // finding gross deductions (Gross pay * 20% / 100%)
-            int percentage = 100;                    
-            double emergencyTaxDeduction = remainingBalance * EmergencyTax / percentage;
+            // finding gross deductions (Gross pay * 20% / 100%)                
+            double emergencyTaxDeduction = remainingBalance * EmergencyTax / PERCENTAGE;
             
             // two decimal number formating    
-            emergencyTaxDeduction = Math.round(emergencyTaxDeduction * percentage);
-            emergencyTaxDeduction = emergencyTaxDeduction / percentage;
+            emergencyTaxDeduction = Math.round(emergencyTaxDeduction * PERCENTAGE);
+            emergencyTaxDeduction = emergencyTaxDeduction / PERCENTAGE;
                                
             return emergencyTaxDeduction;
         }
         
+        //======================================================================== 
         
-        /**
-         * 
-         * @param weeklyTaxCrdits
-         * @return weekly TaxDeduction Credits
-         */
         @Override
         public double getWeeklyTaxCredits(double weeklyTaxCrdits) {
 
-            int numberOfWeeks = 52;
-            int percentage = 100;
-           
+            int numberOfWeeks = 52;           
             weeklyTaxCrdits = weeklyTaxCrdits  / numberOfWeeks;
             
             // two decimal number formating    
-            weeklyTaxCrdits = Math.round(weeklyTaxCrdits * percentage);
-            weeklyTaxCrdits = weeklyTaxCrdits / percentage;
+            weeklyTaxCrdits = Math.round(weeklyTaxCrdits * PERCENTAGE);
+            weeklyTaxCrdits = weeklyTaxCrdits / PERCENTAGE;
 
             return weeklyTaxCrdits;
         }                
 
-
-        /**
-         * 
-         * @return  Weekly Pay Limit
-         */
+        //======================================================================== 
+      
         @Override
         public double getWeeklyPayLimit() {
 
@@ -258,18 +215,14 @@
             double weeklyPayLimit = this.singlePersonRateBand / numberOfWeeks;
 
             // two decimal number formating    
-            weeklyPayLimit = Math.round(weeklyPayLimit * 100);
-            weeklyPayLimit = weeklyPayLimit/100;
+            weeklyPayLimit = Math.round(weeklyPayLimit * PERCENTAGE);
+            weeklyPayLimit = weeklyPayLimit / PERCENTAGE;
 
             return weeklyPayLimit;
         }
 
-
-        /**
-         * 
-         * @param fortnightlyTaxCrdits
-         * @return Fortnightly TaxDeduction Credits
-         */
+        //======================================================================== 
+        
         @Override
         public double getFortnightlyTaxCredits(double fortnightlyTaxCrdits) {
 
@@ -278,17 +231,14 @@
             fortnightlyTaxCrdits = fortnightlyTaxCrdits / numberOfWeeks;
             
             // two decimal number formating    
-            fortnightlyTaxCrdits = Math.round(fortnightlyTaxCrdits * 100);
-            fortnightlyTaxCrdits = fortnightlyTaxCrdits/100;
+            fortnightlyTaxCrdits = Math.round(fortnightlyTaxCrdits * PERCENTAGE);
+            fortnightlyTaxCrdits = fortnightlyTaxCrdits / PERCENTAGE;
 
             return fortnightlyTaxCrdits;
         }
 
-
-        /**
-         * 
-         * @return fortnightly Pay Limit
-         */
+        //======================================================================== 
+        
         @Override
         public double getFortnightlyPayLimit() {
 
@@ -298,18 +248,14 @@
             double fortnightlyPayLimit = this.singlePersonRateBand / numberOfWeeks;
 
             // two decimal number formating    
-            fortnightlyPayLimit = Math.round(fortnightlyPayLimit * 100);
-            fortnightlyPayLimit = fortnightlyPayLimit/100;
+            fortnightlyPayLimit = Math.round(fortnightlyPayLimit * PERCENTAGE);
+            fortnightlyPayLimit = fortnightlyPayLimit / PERCENTAGE;
 
             return fortnightlyPayLimit;
         }
 
-
-        /**
-         * 
-         * @param MonthlyTaxCredits
-         * @return monthly TaxDeduction Credits
-         */
+        //======================================================================== 
+        
         @Override
         public double getMonthlyTaxCredits(double MonthlyTaxCredits) {
 
@@ -317,17 +263,14 @@
             MonthlyTaxCredits = MonthlyTaxCredits / numberOfWeeks;
             
             // two decimal number formating    
-            MonthlyTaxCredits = Math.round(MonthlyTaxCredits * 100);
-            MonthlyTaxCredits = MonthlyTaxCredits/100;
+            MonthlyTaxCredits = Math.round(MonthlyTaxCredits * PERCENTAGE);
+            MonthlyTaxCredits = MonthlyTaxCredits / PERCENTAGE;
             
             return MonthlyTaxCredits;
         }
 
-
-        /**
-         * 
-         * @return Monthly Pay Limit
-         */
+        //======================================================================== 
+        
         @Override
         public double getMonthlyPayLimit() {
 
@@ -337,19 +280,14 @@
             double monthlyPayLimit = this.singlePersonRateBand / numberOfMonths;
 
             // two decimal number formating    
-            monthlyPayLimit = Math.round(monthlyPayLimit * 100);
-            monthlyPayLimit = monthlyPayLimit/100;
+            monthlyPayLimit = Math.round(monthlyPayLimit * PERCENTAGE);
+            monthlyPayLimit = monthlyPayLimit / PERCENTAGE;
 
             return monthlyPayLimit;
         }
 
+        //======================================================================== 
         
-        /**
-         * @param companyName print out company name  
-         * @param amount  
-         * @return  amount
-         * Get user input to set the TaxDeduction Credit validation by using UTILITIES CLASS
-         */
         @Override
         public double SinglePersonTaxCreditBalance(String companyName, double amount ){
 
@@ -386,22 +324,15 @@
           return amount;
         }
         
-     
-        /**
-         * @return the remaining TaxDeduction Credits
-         */
+        //======================================================================== 
+        
         @Override
         public double getSinglePersonTaxCredits() {
             return singlePersonTaxCredits;
         } 
         
+        //======================================================================== 
         
-        /**
-         * @param companyName print out company name  
-         * @param amount  
-         * @return  amount
-         * Get user input to set the TaxDeduction Credit validation 
-         */
         @Override
         public double MarriedPersonTaxCreditBalance(String companyName, double amount){
             
@@ -430,9 +361,8 @@
          return amount;
        }
         
-        /**
-         * @return the amount of (TAX Credits) left 
-         */
+        //======================================================================== 
+        
         @Override
         public double getMarriedPersonTaxCredits() {
              return marriedPersonTaxCredits;

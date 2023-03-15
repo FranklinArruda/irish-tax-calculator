@@ -1,8 +1,8 @@
 
 package Enums;
+
 /**
- *
- * @author STUDENT
+ * @author FRANKLIN
  */
 public enum HourOfTheDay {
     

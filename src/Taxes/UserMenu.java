@@ -7,20 +7,12 @@ import java.util.GregorianCalendar;
 import Enums.HourOfTheDay;
 
 /**
- *
  * @author FRANKLIN
  */
 public class UserMenu {
     
     int selectedOption; 
-   
-    
-    // default construtor
-    /*UserMenu(){
-        this.selectedOption=0;
-    }*/
-    
-    
+       
      public void userGreetings() throws IOException{
               
         // getting current time to greeting the user

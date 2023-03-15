@@ -2,8 +2,7 @@
 package Enums;
 
 /**
- *
- * @author STUDENT
+ * @author FRANKLIN
  */
 public enum Tax {
     

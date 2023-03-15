@@ -8,16 +8,10 @@
      * @author FRANKLIN
      */
     public class UserStatus implements UserStatusInterface {
-            
-      //  public UserStatus(){   
-        //}
-        
-        // Global decimal format to display double in 2 decimal place 
-        public static DecimalFormat df = new DecimalFormat("0.00");
+                    
+        // GLOBAL DECIMAL FORMAT to display double in 2 decimal place 
+        public static final DecimalFormat df = new DecimalFormat("0.00");
 
-        
-        
-        
         /**
          * 
          */
