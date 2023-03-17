@@ -5,7 +5,8 @@
     import java.io.InputStreamReader;
     import Enums.USC_IncomeBand;
     import Enums.USC_PercentageBand;
-    import Enums.Tax;
+    import Enums.TaxRates;
+    import Enums.StandardIncomeBand;
    
     /**
      * @author FRANKLIN
@@ -14,14 +15,25 @@
         
         // GLOBAL INT PERCENTAGE 100 as helper for the calculation
         static final int PERCENTAGE = 100;
+        
+        // Setting up Attributes for single 
+        double singlePersonTaxCredits;
+        double marriedPersonTaxCredits;
+        double PRSI;
+        
+        // Initialized constructor
+        public TaxDeduction(){
+        this.singlePersonTaxCredits = 3500;
+        this.marriedPersonTaxCredits = 5350;
+        this.PRSI = 12;
+        }
          
+        //========================================================================
         @Override
         public double getPRSI(double salary) {
 
-            int PRSI = Tax.PRSI.getTax(); // Enum Object
-           
             double taxRate_4 = 4;
-            double PRSIresults = taxRate_4 * salary / PERCENTAGE - PRSI;
+            double PRSIresults = taxRate_4 * salary / PERCENTAGE - this.PRSI;
 
             // two decimal number formating    
             PRSIresults = Math.round(PRSIresults * PERCENTAGE);
@@ -34,75 +46,84 @@
                 
         @Override
         public double getUSC(double salary, String companyName) {
-           
+        
             double USC_results = 0; // USC_Income_Bands results
             double getUserUSC = -1; // get user input
             boolean valid = false; // boolean to validate USC_Income_Bands
              
+            // Display message to the user and the company 
             System.out.println("Enter your Estimated Income for " + companyName + " this year: ");
             
-            Utilities userUSC = new Utilities();
+            Utilities userUSC = new Utilities(); // Get user input and validate it
             getUserUSC =userUSC.getUserDouble();
-                     
+                    
             try {
-                do{
-                    // it calculates income up to 12,012.00 a year at (0,5%)
-                    // it must be higher than 0
-                    if ((getUserUSC < USC_IncomeBand.USC_BAND_1.getUSC_Band())){ // Enums OBJECTS
-                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / PERCENTAGE);
-                        valid = true;//must be OK
-                    }
+                 do{    
+                        
+                        // it calculates income up to 12,012.00 a year at (0,5%)
+                        if ((getUserUSC < USC_IncomeBand.USC_RATE_BAND_1.getUSC_Band())){ 
+                            USC_results = (USC_PercentageBand.PERCENTAGE_BAND_1.getPercentage() * salary / PERCENTAGE);
+                            valid = true;
+                        }
 
-                    // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
-                    else if ((getUserUSC > USC_IncomeBand.USC_BAND_2.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_BAND_2.getUSC_Band())){ // ENUM
-                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / PERCENTAGE);
-                        valid = true;//must be OK
-                    }
+                        // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
+                        else if ((getUserUSC > USC_IncomeBand.USC_RATE_BAND_1.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_RATE_BAND_2.getUSC_Band())){ // ENUM
+                            USC_results = (USC_PercentageBand.PERCENTAGE_BAND_2.getPercentage() * salary / PERCENTAGE);
+                            valid = true;
+                        }
 
-                    // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
-                    // Enums OBJECTS
-                    else if ((getUserUSC > USC_IncomeBand.USC_BAND_3.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_BAND_3.getUSC_Band())){ // ENUM
-                        USC_results = (USC_PercentageBand.BANDS_1.getPercentage() * salary / PERCENTAGE);
-                        valid = true;//must be OK
-                    }
-
+                        // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
+                        else if ((getUserUSC > USC_IncomeBand.USC_RATE_BAND_2.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_RATE_BAND_3.getUSC_Band())){ // ENUM
+                            USC_results = (USC_PercentageBand.PERCENTAGE_BAND_3.getPercentage() * salary / PERCENTAGE);
+                            valid = true;
+                        }
+    
                     // two decimal number formating   
                     getUserUSC = Math.round(getUserUSC * PERCENTAGE);
                     getUserUSC = getUserUSC / PERCENTAGE;
 
-                }while (!valid);   
+                }while (!valid); // It keeps going while is not VALID
 
             }catch(Exception e){
+                
                     // this will be if the parseInt threw an error -- so the user did not enter a number
                     System.err.println("Only numbers.Please try again!");  
                 }     
-        return USC_results;
+        return USC_results; // Will return the results
         }
  
         //======================================================================== 
-       
+       /**
+        * 
+        * @param salary
+        * @return 
+        */
         @Override
         public double getPension(double salary){
 
            BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
              
-            double PensionResults = 0;
-            double getUserpension;
-            boolean userPension = false;
-            boolean valid = false;
-            String userChoice;
+            double PensionResults = 0; // initialized to zero
+            double getUserpension; // holds user input
+            boolean userPension = false; // It must be greater than zero (validate int)
+            boolean valid = false; // Validate String
+            String userChoice; // Validate with if / else
                
                 do{  
                    try {
                        
+                    // Prompt message to the User  
                     String prompt="Are you in any Pension Scheme? \n"
                                 +"--------------------------\n"
                                 +"Enter: Y (YES) to proceed \n"
                                 +"Enter: N (No) if not sure:";
                     System.out.println(prompt);
-                    userChoice = myKeyboard.readLine().trim().toUpperCase();
                     
+                    // removes any spaces and uppecasethe any letters
+                    userChoice = myKeyboard.readLine().trim().toUpperCase(); 
+                     
                     // space between letter 'Z' and square brackets ']' in case the user types two words   
+                    
                     if(!userChoice.matches("[a-zA-Z ]+") && (!userChoice.equals("Y")) && (!userChoice.equals("N"))){
                         System.err.println("Only Letters Allowed. Please try again!");
                         valid=false;
@@ -118,12 +139,16 @@
                                     getUserpension = Double.parseDouble(myKeyboard.readLine());
 
                                     //check that the value is allowed by checking range
+                                    // if user input notgreater than zero will keep reapeating until goes throug
                                     if (getUserpension <=0){
                                         System.err.println("Invalid value entered. Please enter a number greater than ZERO");
                                         userPension=false;
                                      } 
-                                    //must be OK
-                                    else {                                      
+                                    
+                                    // must be OK
+                                    // it calculates the salary against percentage and user input
+                                    // stores the results in (Pension Results)
+                                    else {   
                                          PensionResults = getUserpension * salary / PERCENTAGE; 
                                          userPension = true;
                                      }
@@ -160,7 +185,7 @@
         @Override
         public double regularTaxDeduction(double salary){
             
-            int RegularTax = Tax.REGULAR_TAX.getTax(); // Enum Object
+            int RegularTax = TaxRates.REGULAR_TAX.getTax(); // Enum Object
             
             // finding gross deductions (Gross pay * 20% / 100%)                  
             double regularTaxDeduction =  salary * RegularTax / PERCENTAGE;
@@ -177,7 +202,7 @@
         @Override
         public double emergencyTaxDeduction(double remainingBalance){
             
-            int EmergencyTax = Tax.EMERGENCY_TAX.getTax(); // Enum Object
+            int EmergencyTax = TaxRates.EMERGENCY_TAX.getTax(); // Enum Object
             
             // finding gross deductions (Gross pay * 20% / 100%)                
             double emergencyTaxDeduction = remainingBalance * EmergencyTax / PERCENTAGE;
@@ -212,13 +237,13 @@
             // number of weeks throghout the year
             int numberOfWeeks = 52;
 
-            double weeklyPayLimit = this.singlePersonRateBand / numberOfWeeks;
-
+            // Calling Enum Standard Income Band to calculate the monthly limit as per Rate Band
+            double weeklyPayLimit = StandardIncomeBand.RATE_BAND_1.getRateBand() / numberOfWeeks;
             // two decimal number formating    
             weeklyPayLimit = Math.round(weeklyPayLimit * PERCENTAGE);
             weeklyPayLimit = weeklyPayLimit / PERCENTAGE;
 
-            return weeklyPayLimit;
+            return weeklyPayLimit; // will return the weekly limit based on the (Rate band 1) 40,000.00 year
         }
 
         //======================================================================== 
@@ -245,13 +270,14 @@
             // number of fortnightly throghout the year
             int numberOfWeeks = 26;       
 
-            double fortnightlyPayLimit = this.singlePersonRateBand / numberOfWeeks;
-
+            // Calling Enum Standard Income Band to calculate the monthly limit as per Rate Band
+            double fortnightlyPayLimit = StandardIncomeBand.RATE_BAND_1.getRateBand() / numberOfWeeks;
+            
             // two decimal number formating    
             fortnightlyPayLimit = Math.round(fortnightlyPayLimit * PERCENTAGE);
             fortnightlyPayLimit = fortnightlyPayLimit / PERCENTAGE;
 
-            return fortnightlyPayLimit;
+            return fortnightlyPayLimit; // will return the fortnigh limit based on the (Rate band 1) 40,000.00 year
         }
 
         //======================================================================== 
@@ -277,13 +303,14 @@
             // number of throghout the year
             int numberOfMonths = 12; 
 
-            double monthlyPayLimit = this.singlePersonRateBand / numberOfMonths;
-
+            // Calling Enum Standard Income Band to calculate the monthly limit as per Rate Band
+            double monthlyPayLimit = StandardIncomeBand.RATE_BAND_1.getRateBand() / numberOfMonths;
+            
             // two decimal number formating    
             monthlyPayLimit = Math.round(monthlyPayLimit * PERCENTAGE);
             monthlyPayLimit = monthlyPayLimit / PERCENTAGE;
 
-            return monthlyPayLimit;
+            return monthlyPayLimit; // will return the monthly limit based on the (Rate band 1) 40,000.00 year
         }
 
         //======================================================================== 
@@ -308,13 +335,11 @@
                         if( this.singlePersonTaxCredits >= amount ) {
                             
                             this.singlePersonTaxCredits = this.singlePersonTaxCredits - amount;
-                            //remainingBalnce = this.singlePersonTaxCredits; // stores the remaining TaxDeduction Credits
-                            
-                            //System.out.println("Remaining TaxDeduction Credits : " + remainingBalnce + "\n");
                             break; // will stop the loop if there is anough TaxDeduction Credits           
                         }
+                        
                         else {
-
+                            
                             // stores the remaining TaxDeduction Credits
                             remainingBalnce = this.singlePersonTaxCredits; 
                             System.err.println("Not enough Tax Credits");
@@ -329,18 +354,21 @@
         @Override
         public double getSinglePersonTaxCredits() {
             return singlePersonTaxCredits;
-        } 
+        }    
+        
+        
+    }
         
         //======================================================================== 
         
-        @Override
+       /* @Override
         public double MarriedPersonTaxCreditBalance(String companyName, double amount){
             
             double remainingBalnce = 0;
              
              do{ 
                 try {
-                    System.out.println("Enter Tax Credits for " + companyName );
+                    System.out.println("Enter TaxRates Credits for " + companyName );
                     
                 }catch(Exception e){
                 // this will be if the parseInt threw an error -- so the user did not enter a number
@@ -351,11 +379,11 @@
                             this.marriedPersonTaxCredits = this.marriedPersonTaxCredits - amount;
                             remainingBalnce = this.marriedPersonTaxCredits; // stores the remaining TaxDeduction Credits
                             
-                            System.out.println("Remaining Tax Credits : " + remainingBalnce + "\n");
+                            System.out.println("Remaining TaxRates Credits : " + remainingBalnce + "\n");
                             break; // will stop the loop if there is anough TaxDeduction Credits           
                         }
                         else {
-                            System.err.println("Not enough Tax Credits");
+                            System.err.println("Not enough TaxRates Credits");
                         }
              }while((amount > remainingBalnce)); 
          return amount;
@@ -367,5 +395,5 @@
         public double getMarriedPersonTaxCredits() {
              return marriedPersonTaxCredits;
          }
-    }
+    }*/
     

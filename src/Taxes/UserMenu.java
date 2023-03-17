@@ -13,7 +13,7 @@ public class UserMenu {
     
     int selectedOption; 
        
-     public void userGreetings() throws IOException{
+    public void userGreetings() throws IOException{
               
         // getting current time to greeting the user
         GregorianCalendar time = new GregorianCalendar();
@@ -44,6 +44,7 @@ public class UserMenu {
             // calling method to get users INT and initializing the return type to zero
             Utilities getUserInput = new Utilities();
             
+            // get user input
             selectedOption = getUserInput.getUserInt();
         
             if (selectedOption == 1){
