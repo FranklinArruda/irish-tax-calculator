@@ -121,7 +121,6 @@ public interface TaxDeductionInterface {
     public double getMonthlyTaxCredits(double MonthlyTaxCredits);
     
     
-    
      /**
      * PAY LIMIT WORKS AS FOLLOW:
      * 
@@ -131,34 +130,4 @@ public interface TaxDeductionInterface {
      * @return monthly pay limit
      */
     public double getMonthlyPayLimit();
-
-    
-    /**
-     * @param companyName print out company name  
-     * @param amount  
-     * @return  amount
-     * Get user input to set the TaxDeduction Credit validation by using UTILITIES CLASS
-     */
-    public double SinglePersonTaxCreditBalance(String companyName, double amount );
-     
-    
-    /**
-     * @return the remaining TaxDeduction Credits
-     */
-    public double getSinglePersonTaxCredits();
-    
-    
-    /**
-     * @param companyName print out company name 
-     * @param amount  
-     * @return  amount
-     * Get user input to set the TaxDeduction Credit validation 
-     */
-   // public double MarriedPersonTaxCreditBalance(String companyName, double amount);
-    
-    
-    /**
-     * @return the amount of (TAX Credits) left 
-     */
-    //public double getMarriedPersonTaxCredits();  
 }

@@ -1,13 +1,16 @@
 
     package Taxes;
+    
+import Enums.TaxCalculatorContainer;
+    import Enums.TaxCalculatorContainer.StandardIncomeBand;
+    import Enums.TaxCalculatorContainer.TaxRates;
+    import Enums.TaxCalculatorContainer.USC_IncomeBand;
+    import Enums.TaxCalculatorContainer.USC_PercentageBand;
+    
     import Utilities.Utilities;
     import java.io.BufferedReader;
     import java.io.InputStreamReader;
-    import Enums.USC_IncomeBand;
-    import Enums.USC_PercentageBand;
-    import Enums.TaxRates;
-    import Enums.StandardIncomeBand;
-   
+    
     /**
      * @author FRANKLIN
      */
@@ -15,25 +18,15 @@
         
         // GLOBAL INT PERCENTAGE 100 as helper for the calculation
         static final int PERCENTAGE = 100;
-        
-        // Setting up Attributes for single 
-        double singlePersonTaxCredits;
-        double marriedPersonTaxCredits;
-        double PRSI;
-        
-        // Initialized constructor
-        public TaxDeduction(){
-        this.singlePersonTaxCredits = 3500;
-        this.marriedPersonTaxCredits = 5350;
-        this.PRSI = 12;
-        }
-         
+      
         //========================================================================
+        
         @Override
         public double getPRSI(double salary) {
-
+          
+            double PRSI = 12;
             double taxRate_4 = 4;
-            double PRSIresults = taxRate_4 * salary / PERCENTAGE - this.PRSI;
+            double PRSIresults = taxRate_4 * salary / PERCENTAGE - PRSI;
 
             // two decimal number formating    
             PRSIresults = Math.round(PRSIresults * PERCENTAGE);
@@ -93,11 +86,7 @@
         }
  
         //======================================================================== 
-       /**
-        * 
-        * @param salary
-        * @return 
-        */
+      
         @Override
         public double getPension(double salary){
 
@@ -312,88 +301,5 @@
 
             return monthlyPayLimit; // will return the monthly limit based on the (Rate band 1) 40,000.00 year
         }
-
-        //======================================================================== 
-        
-        @Override
-        public double SinglePersonTaxCreditBalance(String companyName, double amount ){
-
-             double remainingBalnce = 0;
-             
-             do{ 
-                try {
-                    System.out.println("Enter Tax Credits for " + companyName );
-                   
-                    // call method get user Double
-                    Utilities userTax = new Utilities();
-                    amount = userTax.getUserDouble(); //amount = getUserDouble();
-                   
-                }catch(Exception e){
-                   // this will be if the parseInt threw an error -- so the user did not enter a number
-                    System.err.println("Only numbers.Please try again!");  
-                }    
-                        if( this.singlePersonTaxCredits >= amount ) {
-                            
-                            this.singlePersonTaxCredits = this.singlePersonTaxCredits - amount;
-                            break; // will stop the loop if there is anough TaxDeduction Credits           
-                        }
-                        
-                        else {
-                            
-                            // stores the remaining TaxDeduction Credits
-                            remainingBalnce = this.singlePersonTaxCredits; 
-                            System.err.println("Not enough Tax Credits");
-                            System.out.println("This is the Remaining Tax Credits : " + remainingBalnce + " for company " + companyName + "\n");
-                        }
-             }while((amount > remainingBalnce)); 
-          return amount;
-        }
-        
-        //======================================================================== 
-        
-        @Override
-        public double getSinglePersonTaxCredits() {
-            return singlePersonTaxCredits;
-        }    
-        
-        
     }
-        
-        //======================================================================== 
-        
-       /* @Override
-        public double MarriedPersonTaxCreditBalance(String companyName, double amount){
-            
-            double remainingBalnce = 0;
-             
-             do{ 
-                try {
-                    System.out.println("Enter TaxRates Credits for " + companyName );
-                    
-                }catch(Exception e){
-                // this will be if the parseInt threw an error -- so the user did not enter a number
-                System.err.println("Only numbers.Please try again!");  
-                }    
-                         if( this.marriedPersonTaxCredits >= amount ) {
-                            
-                            this.marriedPersonTaxCredits = this.marriedPersonTaxCredits - amount;
-                            remainingBalnce = this.marriedPersonTaxCredits; // stores the remaining TaxDeduction Credits
-                            
-                            System.out.println("Remaining TaxRates Credits : " + remainingBalnce + "\n");
-                            break; // will stop the loop if there is anough TaxDeduction Credits           
-                        }
-                        else {
-                            System.err.println("Not enough TaxRates Credits");
-                        }
-             }while((amount > remainingBalnce)); 
-         return amount;
-       }
-        
-        //======================================================================== 
-        
-        @Override
-        public double getMarriedPersonTaxCredits() {
-             return marriedPersonTaxCredits;
-         }
-    }*/
     

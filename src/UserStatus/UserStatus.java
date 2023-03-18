@@ -1,9 +1,10 @@
 
     
-    package Taxes;
+    package UserStatus;
+    import Enums.TaxCalculatorContainer.PaymentFrequency;
     import Utilities.Utilities;
     import java.text.DecimalFormat;
-    import Enums.PaymentFrequency;
+    import Taxes.TaxDeduction;
 
     /**
      * @author FRANKLIN
@@ -15,66 +16,81 @@
 
         @Override
         public void SinglePersonTax(){
-             
+            
             //USING UTILITIES CLASS FOR GETTING USER INPUT
+            
             Utilities userInt = new Utilities();    // call method get user int 
             Utilities userDouble = new Utilities(); // call method get user text
             Utilities userText = new Utilities();   // call method get user double
            
             //=========================================================================================
+            
             TaxDeduction weeklyLimit = new TaxDeduction(); // call weekly pay limit method
             TaxDeduction weekly = new TaxDeduction(); // call weekly gross deduction at 20%
-           
             TaxDeduction fortnightlyPayLimit = new TaxDeduction(); // call fortnightly pay limit method
             TaxDeduction fortnightly = new TaxDeduction(); // call FORTNIGHT gross deduction at 20%
-            
             TaxDeduction monthlyPayLimit = new TaxDeduction(); //// call monthly pay limit method
             TaxDeduction monthly = new TaxDeduction(); // call MONTHLY gross deduction at 20%
+            
             //=========================================================================================
             
-            TaxDeduction getTaxCredits = new TaxDeduction(); // call method get weekly, fortnightly and monthly tax credits
-            TaxDeduction PRSI_tax = new TaxDeduction(); // call method get PRSI TaxDeduction
+            UserTaxCredits UserTaxCredits = new UserTaxCredits(); // call method Set Single Person Tax Credits
+                       
+            //=========================================================================================
+            
+            TaxDeduction getWeeklyTax = new TaxDeduction(); // call method get weekly, fortnightly and monthly tax credits
+            TaxDeduction get_PRSI = new TaxDeduction(); // call method get PRSI TaxDeduction
             TaxDeduction userPension = new TaxDeduction(); // call method get PRSI TaxDeduction
             TaxDeduction userUSC = new TaxDeduction(); // call method get USC TaxDeduction
+            
             //=========================================================================================
             
             
-            // Ask user how many employers they are currently working
+            //Ask user how many employers they are currently working 
             System.out.println("How many employers are you currently working for?");
             int numberOfEmployers = userInt.getUserInt();  // method to get numbers of employers from user
             
-            // Getting employers name based on the numbers of employers entered by the user
-            // and storing inside the array (Company Name)
+            /*-----------------------------------------------------------
+             Getting employers name based on the numbers of employers entered by the user
+             and storing inside the array (Company Name)
+            --------------------------------------------------------------*/
             String companyName [] = new String [numberOfEmployers];
 
-                //--------FOR LOOP 1
+            
+                //===========NESTED LOOP==============================================================
+                
                 // to access array through the numbers of emplyers and calling get user text method
                 // inside the for loop to state the companys name through the number of employers. 
                 for(int i=0; i < numberOfEmployers; i++){
                     companyName[i] = userText.getUserText("Employer " +(i +1) + " Name:"); // calling get user text Method
                 } 
                 
-                           
-                //-------FOR LOOP 2
                 // to read companys name through numbers of employers
                 // it will gets repeated until number of employers finish
                 for(int i=0; i<companyName.length; i++) {
-        
+         
+                    /*---------------------------------------------------------------------------------
+                    Getting User Tax Credits (WITHDRAW)
                     
-                    // method to get USERs Tax Deduction Credits 
-                    // storing objetc in the user Tax variable to use it everywhere
-                    // using companys name in the parameter and amount of tax credits initialized to zero
-                    // will return the companys name and tax credits for each company progressively
-                    double userTax = getTaxCredits.SinglePersonTaxCreditBalance(companyName[i],0);
+                    Holds in the UserTaxCreditsBlance variable to use it everywhere
+                    using companys name in the parameter and amount of tax credits initialized to zero
+                    will return the companys name and tax credits for each company progressively
+                    ----------------------------------------------------------------------------------*/
+                    double UserTaxCreditsWithDraw = UserTaxCredits.SinglePersonTaxCreditsWithdraw(companyName[i], 0);
+                   
+                    /*---------------------------------------------------------------------------------
+                    Getting User Tax Credits (BALANCE)
                     
-                    
-                    // Displays the remaining tax credits left
-                    System.out.println("REMAINING TAX " + getTaxCredits.getSinglePersonTaxCredits());
-                    
+                    Calling the (Get SIngle Person Tax Credits Balance) method to 
+                    display the remaining tax credits left 
+                           ---------------------------------------------------------------------------*/
+                    double UserTaxCreditsBalance = UserTaxCredits.getSinglePersonTaxCreditsBalance();
+                    System.out.println("Remaining BLNC = " + UserTaxCreditsBalance);
+          
                     // Asks user how often their are getting paid
                     System.out.println("How often are getting paid by " + companyName[i]);
  
-                    // to access Enums (Payment Frequency)assigning type to -1 to count the Enums
+                    // for loop to Inerate ENUM (Payment Frequency)assigning type to -1 to count the Enums
                     for (int type = 1; type <=PaymentFrequency.values().length; type++) {
                          System.out.println( type + ". " + PaymentFrequency.values()[type-1]);
                     }
@@ -103,10 +119,10 @@
                         // Getting USC based on gross eraning for the current year
                         double weeklyUSC = userUSC.getUSC(weeklyGrossPay,companyName[i]);
                         
-                        //userUSC.getUSC(weeklyGrossPay,companyName[i]);
+                       // userUSC.getUSC(weeklyGrossPay,companyName[i]);
 
                         // Calling PRSI method agains the weekly gross pay in the parameters 
-                        double weeklyPRSI = PRSI_tax.getPRSI(weeklyGrossPay);
+                        double weeklyPRSI = get_PRSI.getPRSI(weeklyGrossPay);
                         
                         //6) finding the salary per hour
                         double hourlyPaid = weeklyGrossPay / weeklyHours;
@@ -115,14 +131,13 @@
                         double weeklyPayLimit = weeklyLimit.getWeeklyPayLimit();
                         
                         // 3) finding the weekly tax credits
-                        double weeklyTaxCredits = getTaxCredits.getWeeklyTaxCredits(userTax);
-                        //============================================================================
-                    
+                        double weeklyTaxCredits = getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
+                                           
                         
                         /**
-                         * check whether user is being taxed at emergency tax
-                         * calling get weekly pay limit Method against the weekly gross pay
-                         * if weekly payment is greater than weekly pay limit 
+                         * Check whether user is being taxed at emergency tax
+                         * Calling get weekly pay limit Method against the weekly gross pay
+                         * If weekly payment is greater than weekly pay limit 
                          * (Regular Tax 20%) + (Emergency Tax at 40%) + (PRSI 4% applies)
                          */
                         if (weeklyGrossPay > weeklyPayLimit){
@@ -137,7 +152,7 @@
                             double weeklyGrossDeduction = weeklyLimit.regularTaxDeduction(weeklyPayLimit);
 
                             // 4) finding TaxDeduction Payable 20%
-                            double weeklyTaxPayble_20 = weeklyGrossDeduction - getTaxCredits.getWeeklyTaxCredits(userTax);
+                            double weeklyTaxPayble_20 = weeklyGrossDeduction - getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
 
                             // 5) finding net pay 20%
                             double weeklyNetPay_20 = weeklyPayLimit - weeklyTaxPayble_20;
@@ -146,7 +161,7 @@
                             //-------------- EMERGENCY TAX DEDUCTION at 40% ---------------
 
                             // 1) Calling emergency tax deduction and assigning the remaning balance in the parameter
-                            double taxPayble_40 = getTaxCredits.emergencyTaxDeduction(weeklyRemainingBalance);
+                            double taxPayble_40 = getWeeklyTax.emergencyTaxDeduction(weeklyRemainingBalance);
 
                             // 2) TOTAL deduction 
                             double TOTAL_Deductions = weeklyTaxPayble_20 + taxPayble_40 + weeklyPRSI + weeklyUSC + weeklyPension;
@@ -173,7 +188,7 @@
                             System.out.println("However, your groos pay is above the 352 weekly which means you also must "
                                     + "pay 4% PRSI of your Gross payment less (PRSI Credits of 12 euros for each payment)");
 
-                            System.out.println("Your Tax Credits is Currently \u20ac" + userTax + " divided by " 
+                            System.out.println("Your Tax Credits is Currently \u20ac" + UserTaxCreditsWithDraw + " divided by " 
                                     + "52 Number of weeks = \u20ac" +df.format(weeklyTaxCredits) + " for each gross payment limit on a weekly bases");
 
                             System.out.println("This \u20ac " + df.format(weeklyTaxCredits) + " only works for the Gross Pay (Limit) as shown below: \n");
@@ -226,7 +241,7 @@
                             double weeklyGross = weekly.regularTaxDeduction(weeklyGrossPay);
 
                             // 4) finding TaxDeduction Payable 20%
-                            double weeklyTax_20 = weeklyGross - getTaxCredits.getWeeklyTaxCredits(userTax);
+                            double weeklyTax_20 = weeklyGross - getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
 
                             // finding total deductions 
                             // 2) TOTAL deduction 
@@ -246,13 +261,13 @@
                             System.out.println("However, your groos pay is above the 352 weekly which means you also must "
                             + " pay 4% PRSI of your Gross payment less (PRSI Credits of 12 euros for each payment)");
 
-                            System.out.println("Your Tax Credits is Currently \u20ac" + userTax + " divided by " 
+                            System.out.println("Your Tax Credits is Currently \u20ac" + UserTaxCreditsWithDraw + " divided by " 
                                     + "52 Number of weeks = \u20ac" +df.format(weeklyTaxCredits) + " for each gross payment limit on a weekly bases");
                             
                             System.out.println("First we find the gross deductions of your weekly gross pay "
                             + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(weeklyGross));
 
-                            System.out.println("Then we use your current (Tax Credits) of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction"
+                            System.out.println("Then we use your current (Tax Credits) of  \u20ac " + getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw) + " less gross deduction"
                             + " \u20ac" + df.format(weeklyGross) + " = \u20ac " + df.format(weeklyTax_20) + " Tax Deduction Payble" + "\n");
 
                             System.out.println("At last, gross payment \u20ac " + df.format(weeklyGrossPay) +"\n" 
@@ -283,7 +298,7 @@
                             double weeklyGross = weekly.regularTaxDeduction(weeklyGrossPay);
 
                             // 4) finding TaxDeduction Payable 20%
-                            double weeklyTax_20 = weeklyGross - getTaxCredits.getWeeklyTaxCredits(userTax);
+                            double weeklyTax_20 = weeklyGross - getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
 
                             // finding total deductions 
                             // 2) TOTAL deduction 
@@ -302,7 +317,7 @@
                              System.out.println("First we find the gross deductions of your weekly gross pay "
                               + df.format(weeklyGrossPay) + " x 20% = \u20ac " + df.format(weeklyGross));
 
-                             System.out.println("Then we use your current (Tax Credits) of  \u20ac " + getTaxCredits.getWeeklyTaxCredits(userTax) + " less gross deduction"
+                             System.out.println("Then we use your current (Tax Credits) of  \u20ac " + getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw) + " less gross deduction"
                               + " \u20ac" + df.format(weeklyGross) + " = \u20ac " + df.format(weeklyTax_20) + " Tax Deduction Payble" + "\n");
 
                              System.out.println("At last, tax payble \u20ac " + df.format(weeklyTax_20) + " - \u20ac" + df.format(weeklyGrossPay) + " weekly gross pay");
