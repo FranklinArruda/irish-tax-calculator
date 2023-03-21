@@ -110,5 +110,28 @@ public final class TaxCalculatorContainer {
     public int getPercentage(){
     return income_band;
     }
+    
+    
+    //============================================================
+    
+    //USED this as reference to assign ENUMS with String values
+    // https://www.programiz.com/java-programming/enum-string
+    
+    public enum UserMessage {
+    
+    //Income Band PERCENTAGE 
+    PERCENTAGE_BAND_1("bdh"), // Up to €12,012.01  at 0.5%
+    PERCENTAGE_BAND_2("ddd"), // From €12,012.01 at 2%
+    PERCENTAGE_BAND_3("dd"); //From €22,920.01 to €70,044 at 4.5% 
+    
+    final String message;
+    
+    UserMessage(String band){
+    this.message = band;
     }
-}
+    
+    public String getMessage(){
+    return message;
+    }
+    }
+}}

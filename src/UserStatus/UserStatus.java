@@ -13,6 +13,9 @@
                     
         // GLOBAL DECIMAL FORMAT to display double in 2 decimal place 
         public static final DecimalFormat df = new DecimalFormat("0.00");
+        
+        // GLOBAL INCOME VARIABLE to validate using if/else statement
+        static final int INCOME_BAND = 352;
 
         @Override
         public void SinglePersonTax(){
@@ -34,7 +37,8 @@
             
             //=========================================================================================
             
-            UserTaxCredits UserTaxCredits = new UserTaxCredits(); // call method Set Single Person Tax Credits
+            UserTaxCredits UserTaxCredits = new UserTaxCredits(); // call method for the Single Person Tax Credits
+            UserTaxCredits taxCreditsBALANCE = new UserTaxCredits(); // call method for the Single Person Tax Credits LEFT
                        
             //=========================================================================================
             
@@ -56,10 +60,9 @@
             --------------------------------------------------------------*/
             String companyName [] = new String [numberOfEmployers];
 
-            
-                //===========NESTED LOOP==============================================================
+                //===========FOR LOOPS==============================================================
                 
-                // to access array through the numbers of emplyers and calling get user text method
+                // To access array through the numbers of emplyers and calling get user text method
                 // inside the for loop to state the companys name through the number of employers. 
                 for(int i=0; i < numberOfEmployers; i++){
                     companyName[i] = userText.getUserText("Employer " +(i +1) + " Name:"); // calling get user text Method
@@ -77,16 +80,18 @@
                     will return the companys name and tax credits for each company progressively
                     ----------------------------------------------------------------------------------*/
                     double UserTaxCreditsWithDraw = UserTaxCredits.SinglePersonTaxCreditsWithdraw(companyName[i], 0);
-                   
+                                       
+                    
                     /*---------------------------------------------------------------------------------
                     Getting User Tax Credits (BALANCE)
                     
                     Calling the (Get SIngle Person Tax Credits Balance) method to 
                     display the remaining tax credits left 
-                           ---------------------------------------------------------------------------*/
+                    ----------------------------------------------------------------------------------*/
                     double UserTaxCreditsBalance = UserTaxCredits.getSinglePersonTaxCreditsBalance();
                     System.out.println("Remaining BLNC = " + UserTaxCreditsBalance);
           
+                                        
                     // Asks user how often their are getting paid
                     System.out.println("How often are getting paid by " + companyName[i]);
  
@@ -102,72 +107,105 @@
                     switch (paymentFrequency){
                         
                         case 1:
-                             //------------- WEEKLY PAYMENT ---------
+                        //------------- WEEKLY PAYMENT ---------
                          
                         //========== GLOBAL VARIABLES FOR IF STATEMENTS (WEEKLY) =======================
+                            
                         // get weekly gross pay from user
                         System.out.println("Enter your Weekly Groos pay for " + companyName[i]);
                         double weeklyGrossPay = userDouble.getUserDouble(); // calling get user double to validate input 
                         
-                        // hours per week
+                        // get hours per week
                         System.out.println("How many hours do you usually work on a Weekly bases for " + companyName[i]);
                         double weeklyHours = userDouble.getUserDouble(); // calling get user double to validate input
 
-                        // get pension percentage from user and returning pension results
+                        /*---------------------------------------------------------------------------------
+                        Calling the (Get user Pension) method and assigning the weekly gross pay
+                        in the parameter. Weekly Pension variable will hold the return value of the pension. 
+                        ----------------------------------------------------------------------------------*/
                         double weeklyPension = userPension.getPension(weeklyGrossPay);                     
 
-                        // Getting USC based on gross eraning for the current year
-                        double weeklyUSC = userUSC.getUSC(weeklyGrossPay,companyName[i]);
                         
-                       // userUSC.getUSC(weeklyGrossPay,companyName[i]);
-
-                        // Calling PRSI method agains the weekly gross pay in the parameters 
+                        /*---------------------------------------------------------------------------------
+                        Calling the (Get user USC) method and assigning the weekly gross pay and company name
+                        in the parameter. Weekly USC variable will hold the return value of the pension. 
+                        ----------------------------------------------------------------------------------*/
+                        double weeklyUSC = userUSC.getUSC(weeklyGrossPay,companyName[i]);
+                             
+                        
+                        /*---------------------------------------------------------------------------------
+                        Calling the (Get PRSI) method and assigning the weekly gross pay in the parameter.
+                        Weekly PRSI variable will hold the return value of the pension. 
+                        ----------------------------------------------------------------------------------*/
                         double weeklyPRSI = get_PRSI.getPRSI(weeklyGrossPay);
                         
-                        //6) finding the salary per hour
+                        
+                        /*---------------------------------------------------------------------------------
+                        Finding the hourly paid by divifing weekly gross pay against the weekly hours and 
+                        storing the results in the hourlyPaid.
+                        ----------------------------------------------------------------------------------*/
                         double hourlyPaid = weeklyGrossPay / weeklyHours;
                        
-                        // getting weekly pay limit an storing in a variable weekly pay limit
+                                                
+                        /*---------------------------------------------------------------------------------
+                        Calling(Get user weekly pay limit) method and storing the return value in the weekly
+                        pay limit to make it easier to manipulet rather than call the method all the time.
+                        ----------------------------------------------------------------------------------*/
                         double weeklyPayLimit = weeklyLimit.getWeeklyPayLimit();
                         
-                        // 3) finding the weekly tax credits
-                        double weeklyTaxCredits = getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
-                                           
                         
+                        /*---------------------------------------------------------------------------------
+                        Calling(Get weekly Tax credits) method and assigning the User Tax Credits withdraw
+                        so that will return the exact tax credits for that payment depending on your crdits 
+                        for a specific company. Will store the results in the weekly tax credits variable.
+
+                        Company: AIB = Tax credits is > 1850 only. The get weekly tax credits will use the 
+                        User Tax Credits withdraw in the parameter to do the calculation as follow:
+
+                        1850 / 52 weeks and return the credits for that period which is in this case (35)
+                        euros credits for that company. The remaining credits will be use it for other companies.
+                        ----------------------------------------------------------------------------------*/
+                        double weeklyTaxCredits = getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
+                        
+                                           
                         /**
+                         * IF WEEKLY PAYMENT IS GREATER THAN WEEKLY PAY LIMIT
                          * Check whether user is being taxed at emergency tax
                          * Calling get weekly pay limit Method against the weekly gross pay
-                         * If weekly payment is greater than weekly pay limit 
-                         * (Regular Tax 20%) + (Emergency Tax at 40%) + (PRSI 4% applies)
-                         */
+                         *(Regular Tax 20%) + (Emergency Tax at 40%) + (PRSI 4% applies)
+                         */     
                         if (weeklyGrossPay > weeklyPayLimit){
-
-                            //======= IF ============================================== 
+                            
                             //-------------- REGULAR TAX DEDUCTION at 20% ---------------
-                            // 1) diference between gross pay & weekly gross pay limit = balance to be taxed at 40%
+                            
+                            // 1) Diference between gross pay & weekly gross pay limit = balance to be taxed at 40%
                             double weeklyRemainingBalance = weeklyGrossPay - weeklyPayLimit;
 
-                            // 2) Calling regular tax deduction and assingning the weekly limit in the parameters
-                            // weekly gross deduction from the Weekly pay limit 769 x 20%
+                            // 2) Finding the Gross deduction by Calling regular tax deduction 20% and assingning
+                            //the weekly limit in the parameter. (Weekly pay limit x 20%) = gross deduction
                             double weeklyGrossDeduction = weeklyLimit.regularTaxDeduction(weeklyPayLimit);
 
-                            // 4) finding TaxDeduction Payable 20%
+                            // 3) Finding Tax Deduction Payable at 20%. Calling Get weekly tax credits method and assigning
+                            // the USED tax credits in the parameters. (Gross deduction - weeklytax = weekly tax payable at 20%) 
                             double weeklyTaxPayble_20 = weeklyGrossDeduction - getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
 
-                            // 5) finding net pay 20%
+                            // 4) finding net pay 20%. Because this option goes above the limit we calculate the weekly limit 
+                            // at 20%.  (weekly pay litmit - weekly tax payable = weekly net pay 20%)
                             double weeklyNetPay_20 = weeklyPayLimit - weeklyTaxPayble_20;
 
 
                             //-------------- EMERGENCY TAX DEDUCTION at 40% ---------------
-
-                            // 1) Calling emergency tax deduction and assigning the remaning balance in the parameter
+                            
+                            // 1) Calling emergency tax deduction and assigning the weekly remaning balance
+                            //in the parameter.
                             double taxPayble_40 = getWeeklyTax.emergencyTaxDeduction(weeklyRemainingBalance);
 
-                            // 2) TOTAL deduction 
+                            // 2) TOTAL deduction. Adding up the taxes and all the deductions and storing in the 
+                            // TOTAL deduction variable. 
                             double TOTAL_Deductions = weeklyTaxPayble_20 + taxPayble_40 + weeklyPRSI + weeklyUSC + weeklyPension;
 
-                            // 3) finding NET PAY 
-                            double weeklyNetPay = weeklyGrossPay - TOTAL_Deductions;
+                            // 3) finding NET PAY for this period. Weekly gross pay - Total deductions = (NET PAY) 
+                            double NET_PAY = weeklyGrossPay - TOTAL_Deductions;
                         
                             //-------------------- DISPLAYING THE BREAKDOWN --------------------
                             System.out.println("You are being taxed at (Emergency Tax) by " + companyName[i] + "."
@@ -223,35 +261,34 @@
                                                     +"Difference between (gross pay) and (gross pay limit) at 40% (Emergency Tax) = \u20ac " + taxPayble_40 +"\n" 
                                                     +"Salary per hour on a weekly bases = \u20ac " + df.format(hourlyPaid) + "\n" 
                                                     +"TOTAL Deductions = \u20ac " + df.format(TOTAL_Deductions) +"\n" + "\n"
-                                                    +"Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(weeklyNetPay) + " for this period \n";
+                                                    +"Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period \n";
 
                                             // printing out the breakdown
                                             System.out.println(TAX_breakdown);
                             } 
                         
                         /**
-                         * if weekly payment is less than weekly pay limit, but greater than 352
-                         * (Regular TaxDeduction 20%) + (PRSI 4% applies)
+                         * if weekly payment is less than weekly pay limit, but greater than 352 income band
+                         * (Regular TaxDeduction 20%) + (PRSI) + USC + Pension
                          */
-                        else if (weeklyGrossPay <= weeklyPayLimit && (weeklyGrossPay > 352)){
+                        else if (weeklyGrossPay <= weeklyPayLimit && (weeklyGrossPay > INCOME_BAND)){
                         
-                            //======= IF ELSE ==============================================  
-                            // if weekly payment is less than weekly pay limit, but greater than 352 
+                            // 1) if weekly payment is less than weekly pay limit, but greater than 352 
                             // weekly gross deduction from the Weekly gross pay x 20%
                             double weeklyGross = weekly.regularTaxDeduction(weeklyGrossPay);
 
-                            // 4) finding TaxDeduction Payable 20%
+                            // 2) Finding Tax Deduction Payable at 20%. Calling Get weekly tax credits method and assigning
+                            // the USED tax credits in the parameters. (Weekly gross - weeklytax = weekly tax payable at 20%) 
                             double weeklyTax_20 = weeklyGross - getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
 
-                            // finding total deductions 
-                            // 2) TOTAL deduction 
-                            double TOTAL_Deduct = weeklyTax_20 + weeklyPRSI + weeklyUSC + weeklyPension;
+                            // 3) TOTAL deduction. Adding up the taxes and all the deductions and storing in the 
+                            // TOTAL deduction variable. 
+                            double TOTAL_Deductions_2 = weeklyTax_20 + weeklyPRSI + weeklyUSC + weeklyPension;
 
-                            // finding weekly net pay
-                            double NET_PAY = weeklyGrossPay - TOTAL_Deduct;
+                            // 4) Finding NET PAY for this period. Weekly gross pay - Total deductions = (NET PAY)
+                            double NET_PAY = weeklyGrossPay - TOTAL_Deductions_2;
 
-
-                            //-------------------- DISPLAYING THE BREAKDOWN --------------------
+                            //=================== DISPLAYING BREAKDOWN ============================================
                             System.out.println("You are not at (Emergency TaxDeduction) by " + companyName[i] + " "
                             + " Understand why by reading the information below " + "\n");
 
@@ -281,30 +318,61 @@
                                                         +"Pension Scheme = \u20ac " + weeklyPension + "\n"
                                                         +"Gross pay at 20% (Tax Payable)= \u20ac " + df.format(weeklyTax_20) + "\n"
                                                         +"Salary per hour on a weekly bases = \u20ac " + df.format(hourlyPaid) + "\n" 
-                                                        +"TOTAL Deductions = \u20ac " + df.format(TOTAL_Deduct) +"\n" + "\n"
+                                                        +"TOTAL Deductions = \u20ac " + df.format(TOTAL_Deductions_2) +"\n" + "\n"
                                                         +"Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period \n";
 
                                                 // printing out the breakdown
                                                 System.out.println(TAX_breakdown);
+                                                
+                                                /*--------------------------------------------------------------------------
+                                                (WHEN THE USER HAS NOT ENOUGH TAX CREDITS AND DONT GO OVER THE WEEKLY LIMIT)
+                                                
+                                                Last check to display whether the user is at Emergency tax even here
+                                                because they may not have anough tax crdits for a second employer
+                                                and this if else is to check and only display a message saying that.
+                                                
+                                                Even though this is for the 20% but they may be at emergency tax due to 
+                                                insuficient tax Credits lets. 
+                                                
+                                                Call the get Sinle Person Tax Credits BALANCE. 
+                                                
+                                                If tax credits left is less than 1 they are at emergency tax and but being
+                                                taxed at 20%
+                                                ---------------------------------------------------------------------------*/
+                                                double BLC = UserTaxCredits.getSinglePersonTaxCreditsBalance();
+                                               
+                                                if(BLC <1){
+                                                    String userMessage = "You are being Taxed at (Emergency Tax) even here"
+                                                            + "because you have no Tax Credits left to use it. \n"
+                                                            + "When you are working for a specific employer and your Tax Credits is Zero (0)";
+                                                    System.out.println(userMessage);
+                                                }
+                                                else{
+                                                    System.out.println("Normal TAX basis");
+                                                }
+                                                
+                                                
+                                                
                             }
                         
                         /**
                          * if weekly payment is less than weekly pay limit and 352 euros
-                         * (Regular TaxDeduction 20%) ONLY
+                         * (Regular TaxDeduction 20%) + USC + Pension. . Because PRSI is not
+                         * applied to income less than 352 on a weekly basis
                          */
                         else {
-                            // if weekly payment is less than weekly pay limit, but greater than 352 
+                            // 1)if weekly payment is less than weekly pay limit, but greater than 352 
                             // weekly gross deduction from the Weekly gross pay x 20%
                             double weeklyGross = weekly.regularTaxDeduction(weeklyGrossPay);
 
-                            // 4) finding TaxDeduction Payable 20%
+                            // 2) Finding Deduction at 20% ONLY. (Weekly gross - tax credits = NET PAY) 
                             double weeklyTax_20 = weeklyGross - getWeeklyTax.getWeeklyTaxCredits(UserTaxCreditsWithDraw);
 
-                            // finding total deductions 
-                            // 2) TOTAL deduction 
+                            // 3) TOTAL deduction. Adding up the taxes and all the deductions and storing in the 
+                            // TOTAL deduction variable.
                             double TOTAL_Deduct = weeklyTax_20 + weeklyPRSI + weeklyUSC + weeklyPension;
 
-                            // finding weekly net pay
+                            // 4) Finding NET PAY for this period. Weekly gross pay - Total deductions = (NET PAY)
                             double NET_PAY = weeklyGrossPay - TOTAL_Deduct;
 
                              //-------------------- DISPLAYING THE BREAKDOWN --------------------
@@ -325,8 +393,8 @@
                              System.out.println("Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period " + "\n");
                              }
 
+                             // CASE 1 = WEEKLY payment Finihes here
                              break;
-
                         
                         
                         

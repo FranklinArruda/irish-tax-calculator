@@ -47,6 +47,7 @@ package UserStatus;
                            remainingBalnce = this.singlePersonTaxCredits; 
                            System.err.println("Not enough Tax Credits");
                            System.out.println("This is the Remaining Tax Credits : " + remainingBalnce + " for company " + companyName + "\n");
+                           break; // will stop the loop if there isn't anough TaxDeduction Credits LEFT
                        }
             }while((amount > remainingBalnce)); 
            return amount;                           
