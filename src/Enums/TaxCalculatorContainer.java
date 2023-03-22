@@ -110,28 +110,48 @@ public final class TaxCalculatorContainer {
     public int getPercentage(){
     return income_band;
     }
-    
+    }
     
     //============================================================
     
     //USED this as reference to assign ENUMS with String values
-    // https://www.programiz.com/java-programming/enum-string
+    //https://www.programiz.com/java-programming/enum-string
+    //https://stackoverflow.com/questions/3978654/best-way-to-create-enum-of-strings
+    
     
     public enum UserMessage {
     
-    //Income Band PERCENTAGE 
-    PERCENTAGE_BAND_1("bdh"), // Up to €12,012.01  at 0.5%
-    PERCENTAGE_BAND_2("ddd"), // From €12,012.01 at 2%
-    PERCENTAGE_BAND_3("dd"); //From €22,920.01 to €70,044 at 4.5% 
+    EMERGENCY_TAX_MESSAGE_1{
+
+        @Override
+        public String toString(){
+        return"- When you started in your new job and have no PPSN.";
+        }
+    },
+           
+    EMERGENCY_TAX_MESSAGE_2{        
     
-    final String message;
+        @Override
+        public String toString(){
+        return"- When you started in your new Job. You have PPSN, but the first salary will always be taxed at 40%.";
+        }
+    },
     
-    UserMessage(String band){
-    this.message = band;
-    }
+    EMERGENCY_TAX_MESSAGE_3{
+        
+        @Override
+        public String toString(){
+        return"- When you are working for multiple employer and you do not have enough Tax Credits for each employer.";
+        }
+    },
     
-    public String getMessage(){
-    return message;
+    EMERGENCY_TAX_MESSAGE_4{      
+    
+        @Override
+        public String toString(){
+        return "- When you are working for a specific employer and your Tax Credits is Zero (0).\n"
+                + "Therefore, You are being Taxed at (Emergency Tax) even here because you have no Tax Credits left to use it.";
+        }
+      }
     }
-    }
-}}
+  }

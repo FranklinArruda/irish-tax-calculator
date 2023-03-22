@@ -2,9 +2,11 @@
     
     package UserStatus;
     import Enums.TaxCalculatorContainer.PaymentFrequency;
+    import Enums.TaxCalculatorContainer.UserMessage;
     import Utilities.Utilities;
     import java.text.DecimalFormat;
     import Taxes.TaxDeduction;
+    
 
     /**
      * @author FRANKLIN
@@ -21,7 +23,7 @@
         public void SinglePersonTax(){
             
             //USING UTILITIES CLASS FOR GETTING USER INPUT
-            
+                       
             Utilities userInt = new Utilities();    // call method get user int 
             Utilities userDouble = new Utilities(); // call method get user text
             Utilities userText = new Utilities();   // call method get user double
@@ -211,11 +213,14 @@
                             System.out.println("You are being taxed at (Emergency Tax) by " + companyName[i] + "."
                                  + " Understand why by reading the information below \n");
 
-                            System.out.println("Emergency Tax is calculaded in four different ways: \n"        
-                            +"1: When you started in your new job and have no PPSN \n"
-                            +"2: When you started in your new Job. You have PPSN, but the first salary will always be taxed at 40% \n"
-                            +"3: When you are working for multiple employer and you do not have enough Tax Credits for each employer \n"
-                            +"4: When you are working for a specific employer and your Tax Credits is Zero (0)\n");
+                            // Displaying the 4 different ways on how the emergency Tax is calculates
+                            // Enums String toString to display messages
+                            System.out.println("Emergency Tax is calculaded in four different ways:\n"        
+                                                +UserMessage.EMERGENCY_TAX_MESSAGE_1.toString() + "\n"
+                                                +UserMessage.EMERGENCY_TAX_MESSAGE_2.toString() + "\n"
+                                                +UserMessage.EMERGENCY_TAX_MESSAGE_3.toString() + "\n"
+                                                +UserMessage.EMERGENCY_TAX_MESSAGE_4.toString() + "\n");
+
 
                             System.out.println("As you are (Single) your RATE BAND is at 40,000.00 a year. That is divided by "
                             +"52 weeks because you are getting paid weekly \n");
@@ -289,8 +294,8 @@
                             double NET_PAY = weeklyGrossPay - TOTAL_Deductions_2;
 
                             //=================== DISPLAYING BREAKDOWN ============================================
-                            System.out.println("You are not at (Emergency TaxDeduction) by " + companyName[i] + " "
-                            + " Understand why by reading the information below " + "\n");
+                          //  System.out.println("You are not at (Emergency TaxDeduction) by " + companyName[i] + " "
+                           // + " Understand why by reading the information below " + "\n");
 
                             System.out.println("Because your weekly Gross Pay is " + df.format(weeklyGrossPay)
                             +" below the weekly pay limit > ( " + weeklyPayLimit + "). Your wages is calculate at 20% ONLY" + "\n");
@@ -339,20 +344,23 @@
                                                 If tax credits left is less than 1 they are at emergency tax and but being
                                                 taxed at 20%
                                                 ---------------------------------------------------------------------------*/
-                                                double BLC = UserTaxCredits.getSinglePersonTaxCreditsBalance();
+                                                double TaxCreditsBalance = UserTaxCredits.getSinglePersonTaxCreditsBalance();
                                                
-                                                if(BLC <1){
-                                                    String userMessage = "You are being Taxed at (Emergency Tax) even here"
-                                                            + "because you have no Tax Credits left to use it. \n"
-                                                            + "When you are working for a specific employer and your Tax Credits is Zero (0)";
-                                                    System.out.println(userMessage);
+                                                //ENUM OBJECT TO STORE MESSAGES AS THEY NOT CHANGE VALUES SO i CAN USE IT
+                                                //EVERYWHERE
+                                                 //UserMessage.EMERGENCY_TAX_MESSAGE_1.toString();
+                                                 
+                                                 /*-------------------------------------------------------------------
+                                                 it will check the tax credits balance or Tax credits withdraw less than 0
+                                                 both ways will display emergency tax if any is true.
+                                                 --------------------------------------------------------------------*/
+                                                 
+                                                if((TaxCreditsBalance <1) || (UserTaxCreditsWithDraw <=0)){
+                                                    System.out.println(UserMessage.EMERGENCY_TAX_MESSAGE_4.toString());
                                                 }
                                                 else{
                                                     System.out.println("Normal TAX basis");
-                                                }
-                                                
-                                                
-                                                
+                                                }                  
                             }
                         
                         /**
@@ -360,7 +368,8 @@
                          * (Regular TaxDeduction 20%) + USC + Pension. . Because PRSI is not
                          * applied to income less than 352 on a weekly basis
                          */
-                        else {
+                        else if (weeklyGrossPay <= weeklyPayLimit && (weeklyGrossPay < INCOME_BAND)){
+                            
                             // 1)if weekly payment is less than weekly pay limit, but greater than 352 
                             // weekly gross deduction from the Weekly gross pay x 20%
                             double weeklyGross = weekly.regularTaxDeduction(weeklyGrossPay);
@@ -370,14 +379,14 @@
 
                             // 3) TOTAL deduction. Adding up the taxes and all the deductions and storing in the 
                             // TOTAL deduction variable.
-                            double TOTAL_Deduct = weeklyTax_20 + weeklyPRSI + weeklyUSC + weeklyPension;
+                            double TOTAL_Deductions_3 = weeklyTax_20 + weeklyPRSI + weeklyUSC + weeklyPension;
 
                             // 4) Finding NET PAY for this period. Weekly gross pay - Total deductions = (NET PAY)
-                            double NET_PAY = weeklyGrossPay - TOTAL_Deduct;
+                            double NET_PAY = weeklyGrossPay - TOTAL_Deductions_3;
 
                              //-------------------- DISPLAYING THE BREAKDOWN --------------------
-                             System.out.println("You are not being taxed  at (Emergency TaxDeduction) by " + companyName[i] + "."
-                             + " Understand why by reading the information below " + "\n");
+                           //  System.out.println("You are not being taxed  at (Emergency TaxDeduction) by " + companyName[i] + "."
+                             //+ " Understand why by reading the information below " + "\n");
 
                              System.out.println("Because your weekly Gross Pay is " + df.format(weeklyGrossPay)
                                  +" below the weekly pay limit > ( " + weeklyPayLimit + "). Your wages is calculate at 20% ONLY" + "\n");
@@ -391,31 +400,57 @@
                              System.out.println("At last, tax payble \u20ac " + df.format(weeklyTax_20) + " - \u20ac" + df.format(weeklyGrossPay) + " weekly gross pay");
 
                              System.out.println("Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period " + "\n");
-                             }
+                        
+                                
+                             //===============================BREAKDOWN==============================================
+                            String TAX_breakdown =  "PRSI = not applied as your weekly pay is less than " + INCOME_BAND + "\n"
+                                                        +"USC = \u20ac " + weeklyUSC + "\n"
+                                                        +"Pension Scheme = \u20ac " + weeklyPension + "\n"
+                                                        +"Gross pay at 20% (Tax Payable)= \u20ac " + df.format(weeklyTax_20) + "\n"
+                                                        +"Salary per hour on a weekly bases = \u20ac " + df.format(hourlyPaid) + "\n" 
+                                                        +"TOTAL Deductions = \u20ac " + df.format(TOTAL_Deductions_3) +"\n" + "\n"
+                                                        +"Therefore your NET PAY for ( " + companyName[i] + " ) is: \u20ac " + df.format(NET_PAY) + " for this period \n";
 
+                                                // printing out the breakdown
+                                                System.out.println(TAX_breakdown);
+                                                
+                                                /*--------------------------------------------------------------------------
+                                                (WHEN THE USER HAS NOT ENOUGH TAX CREDITS AND DONT GO OVER THE WEEKLY LIMIT)
+                                                
+                                                Last check to display whether the user is at Emergency tax even here
+                                                because they may not have anough tax crdits for a second employer
+                                                and this if else is to check and only display a message saying that.
+                                                
+                                                Even though this is for the 20% but they may be at emergency tax due to 
+                                                insuficient tax Credits lets. 
+                                                
+                                                Call the get Sinle Person Tax Credits BALANCE. 
+                                                
+                                                If tax credits left is less than 1 they are at emergency tax and but being
+                                                taxed at 20%
+                                                ---------------------------------------------------------------------------*/
+                                                double TaxCreditsBalance = UserTaxCredits.getSinglePersonTaxCreditsBalance();
+                                               
+                                                //ENUM OBJECT TO STORE MESSAGES AS THEY NOT CHANGE VALUES SO i CAN USE IT
+                                                //EVERYWHERE
+                                                //UserMessage.EMERGENCY_TAX_MESSAGE_1.toString();
+                                                 
+                                                 /*-------------------------------------------------------------------
+                                                 it will check the tax credits balance or Tax credits withdraw less than 0
+                                                 both ways will display emergency tax if any is true.
+                                                 --------------------------------------------------------------------*/
+                                                 
+                                                if((TaxCreditsBalance <1) || (UserTaxCreditsWithDraw <=0)){
+                                                    System.out.println(UserMessage.EMERGENCY_TAX_MESSAGE_4.toString());
+                                                }
+                                                else{
+                                                    System.out.println("Normal TAX basis");
+                                                } 
+                        }
                              // CASE 1 = WEEKLY payment Finihes here
                              break;
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+                 
+                             
                         //----- FORTINIGHTLY PAYMENT ---------
                        /*  case 2:
                         

@@ -2,6 +2,8 @@
 package UserStatus;
 
     import Utilities.Utilities;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
     /**
      * @author STUDENT
@@ -24,14 +26,26 @@ package UserStatus;
         public double SinglePersonTaxCreditsWithdraw(String companyName, double amount){
 
             double remainingBalnce = 0; // holds the remaining balance
-
+            boolean valid = false;
             do{ 
                 try {
                    System.out.println("Enter Tax Credits for " + companyName );
 
+                   BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
+                   amount = Integer.parseInt(myKeyboard.readLine());
+                   
+          
+                       if (amount <0){
+                           System.err.println("Invalid value entered. The tax credits cannot be less than ZERO");    
+                       }
+                       else {
+                           //must be OK
+                           valid = true;
+                       }
+               
                   // call method get user Double
-                   Utilities userTax = new Utilities();
-                   amount = userTax.getUserDouble(); //amount = getUserDouble();
+                 //  Utilities userTax = new Utilities();
+                //   amount = userTax.getUserDouble(); //amount = getUserDouble();
 
                 }catch(Exception e){
                    // this will be if the parseInt threw an error -- so the user did not enter a number
@@ -49,7 +63,7 @@ package UserStatus;
                            System.out.println("This is the Remaining Tax Credits : " + remainingBalnce + " for company " + companyName + "\n");
                            break; // will stop the loop if there isn't anough TaxDeduction Credits LEFT
                        }
-            }while((amount > remainingBalnce)); 
+            }while((amount > remainingBalnce) && (!valid)); 
            return amount;                           
        }
         
