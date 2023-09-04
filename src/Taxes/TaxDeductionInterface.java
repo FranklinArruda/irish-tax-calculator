@@ -99,7 +99,7 @@ public interface TaxDeductionInterface {
      * @param fortnightlyTaxCrdits Divide the numbers of weeks by the Weekly Tax credits in the parameter
      * @return Fortnightly TaxDeduction Credits
      */
-    public double getFortnightlyTaxCredits(double fortnightlyTaxCrdits);
+    public double getFortnightTaxCredits(double fortnightlyTaxCrdits);
     
     
      /**
@@ -110,7 +110,7 @@ public interface TaxDeductionInterface {
      * If your fortnight income is over that limit the remaining balance will then be taxed at 40%
      * @return fortnight pay limit
      */
-    public double getFortnightlyPayLimit();
+    public double getFortnightPayLimit();
     
     
     /**

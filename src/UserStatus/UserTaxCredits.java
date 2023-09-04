@@ -16,8 +16,8 @@ import java.io.InputStreamReader;
                      
         // Initialized constructor => setting up values
         public UserTaxCredits(){
-        this.singlePersonTaxCredits = 3500;
-        this.marriedPersonTaxCredits = 5275;
+            this.singlePersonTaxCredits = 3500;
+            this.marriedPersonTaxCredits = 5275;
         }
 
         //========================================================================
@@ -29,23 +29,26 @@ import java.io.InputStreamReader;
             boolean valid = false;
             do{ 
                 try {
+                    // user prompt
                    System.out.println("Enter Tax Credits for " + companyName );
-
+                   
+                   // get user input
                    BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
                    amount = Integer.parseInt(myKeyboard.readLine());
                    
-          
+                       // user validation (the value should be greater than zero)
                        if (amount <0){
                            System.err.println("Invalid value entered. The tax credits cannot be less than ZERO");    
                        }
+                       
+                       //must be OK
                        else {
-                           //must be OK
                            valid = true;
                        }
                
-                  // call method get user Double
-                 //  Utilities userTax = new Utilities();
-                //   amount = userTax.getUserDouble(); //amount = getUserDouble();
+                // call method get user Double
+                // Utilities userTax = new Utilities();
+                // amount = userTax.getUserDouble(); //amount = getUserDouble();
 
                 }catch(Exception e){
                    // this will be if the parseInt threw an error -- so the user did not enter a number

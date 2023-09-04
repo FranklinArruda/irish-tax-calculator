@@ -36,6 +36,24 @@ public final class TaxCalculatorContainer {
     }
     }
     
+    
+     //============================================================
+    
+    public enum IncomePRSI {
+    
+    WEEKLY(352), // Rate band of 40,000.00 year
+    FORTNIGHT(704), // Rate band of 70,000.00 year
+    MONTHLY(1408);
+    final int PRSIband;
+    
+    IncomePRSI(int rateBand){
+    this.PRSIband = rateBand;
+    }
+    
+    public int getIncomePRSI(){
+    return PRSIband;
+    }
+    }
     //============================================================
     
     public enum HourOfTheDay {  
@@ -91,27 +109,7 @@ public final class TaxCalculatorContainer {
     return USC_BAND;
     }
     }
-
-    //============================================================
-    
-    public enum USC_PercentageBand {
-    
-    //Income Band PERCENTAGE 
-    PERCENTAGE_BAND_1(5), // Up to €12,012.01  at 0.5%
-    PERCENTAGE_BAND_2(2), // From €12,012.01 at 2%
-    PERCENTAGE_BAND_3((int)4.5); //From €22,920.01 to €70,044 at 4.5% 
-    
-    final int income_band;
-    
-    USC_PercentageBand(int band){
-    this.income_band = band;
-    }
-    
-    public int getPercentage(){
-    return income_band;
-    }
-    }
-    
+  
     //============================================================
     
     //USED this as reference to assign ENUMS with String values
@@ -125,7 +123,7 @@ public final class TaxCalculatorContainer {
 
         @Override
         public String toString(){
-        return"- When you started in your new job and have no PPSN.";
+        return "- When you started in your new job and have no PPSN.";
         }
     },
            
@@ -133,7 +131,7 @@ public final class TaxCalculatorContainer {
     
         @Override
         public String toString(){
-        return"- When you started in your new Job. You have PPSN, but the first salary will always be taxed at 40%.";
+        return "- When you started in your new Job. You have PPSN, but the first salary will always be taxed at 40%.";
         }
     },
     
@@ -141,7 +139,7 @@ public final class TaxCalculatorContainer {
         
         @Override
         public String toString(){
-        return"- When you are working for multiple employer and you do not have enough Tax Credits for each employer.";
+        return "- When you are working for multiple employer and you do not have enough Tax Credits for each employer.";
         }
     },
     

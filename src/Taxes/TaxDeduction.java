@@ -1,12 +1,9 @@
 
     package Taxes;
-    
-import Enums.TaxCalculatorContainer;
     import Enums.TaxCalculatorContainer.StandardIncomeBand;
     import Enums.TaxCalculatorContainer.TaxRates;
     import Enums.TaxCalculatorContainer.USC_IncomeBand;
-    import Enums.TaxCalculatorContainer.USC_PercentageBand;
-    
+   
     import Utilities.Utilities;
     import java.io.BufferedReader;
     import java.io.InputStreamReader;
@@ -43,38 +40,38 @@ import Enums.TaxCalculatorContainer;
             double USC_results = 0; // USC_Income_Bands results
             double getUserUSC = -1; // get user input
             boolean valid = false; // boolean to validate USC_Income_Bands
+           
+            // Percentage RATES
+            double ratePercentage_1 = 0.5;
+            double ratePercentage_2 = 2;
+            double ratePercentage_3 = 4.5;
              
             // Display message to the user and the company 
             System.out.println("Enter your Estimated Income for " + companyName + " this year: ");
             
             Utilities userUSC = new Utilities(); // Get user input and validate it
-            getUserUSC =userUSC.getUserDouble();
+            getUserUSC = userUSC.getUserDouble();
                     
             try {
                  do{    
-                        
                         // it calculates income up to 12,012.00 a year at (0,5%)
                         if ((getUserUSC < USC_IncomeBand.USC_RATE_BAND_1.getUSC_Band())){ 
-                            USC_results = (USC_PercentageBand.PERCENTAGE_BAND_1.getPercentage() * salary / PERCENTAGE);
+                            USC_results = (ratePercentage_1 * salary / PERCENTAGE);
                             valid = true;
                         }
 
                         // it calculates income from 12,012.00 to 22,920.00 a year at (2%)
                         else if ((getUserUSC > USC_IncomeBand.USC_RATE_BAND_1.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_RATE_BAND_2.getUSC_Band())){ // ENUM
-                            USC_results = (USC_PercentageBand.PERCENTAGE_BAND_2.getPercentage() * salary / PERCENTAGE);
+                            USC_results = (ratePercentage_2 * salary / PERCENTAGE);
                             valid = true;
                         }
 
                         // it calculates income from 22,920.00 up to 70,044.00 a year at (4.5%)
                         else if ((getUserUSC > USC_IncomeBand.USC_RATE_BAND_2.getUSC_Band()) && (getUserUSC < USC_IncomeBand.USC_RATE_BAND_3.getUSC_Band())){ // ENUM
-                            USC_results = (USC_PercentageBand.PERCENTAGE_BAND_3.getPercentage() * salary / PERCENTAGE);
+                            USC_results = (ratePercentage_3 * salary / PERCENTAGE);
                             valid = true;
                         }
     
-                    // two decimal number formating   
-                    getUserUSC = Math.round(getUserUSC * PERCENTAGE);
-                    getUserUSC = getUserUSC / PERCENTAGE;
-
                 }while (!valid); // It keeps going while is not VALID
 
             }catch(Exception e){
@@ -82,7 +79,7 @@ import Enums.TaxCalculatorContainer;
                     // this will be if the parseInt threw an error -- so the user did not enter a number
                     System.err.println("Only numbers.Please try again!");  
                 }     
-        return USC_results; // Will return the results
+        return Math.floor(USC_results * 100) / 100; // Will return the results
         }
  
         //======================================================================== 
@@ -228,6 +225,7 @@ import Enums.TaxCalculatorContainer;
 
             // Calling Enum Standard Income Band to calculate the monthly limit as per Rate Band
             double weeklyPayLimit = StandardIncomeBand.RATE_BAND_1.getRateBand() / numberOfWeeks;
+            
             // two decimal number formating    
             weeklyPayLimit = Math.round(weeklyPayLimit * PERCENTAGE);
             weeklyPayLimit = weeklyPayLimit / PERCENTAGE;
@@ -238,7 +236,7 @@ import Enums.TaxCalculatorContainer;
         //======================================================================== 
         
         @Override
-        public double getFortnightlyTaxCredits(double fortnightlyTaxCrdits) {
+        public double getFortnightTaxCredits(double fortnightlyTaxCrdits) {
 
             // number of fortnightly throghout the year
             int numberOfWeeks = 26;
@@ -254,7 +252,7 @@ import Enums.TaxCalculatorContainer;
         //======================================================================== 
         
         @Override
-        public double getFortnightlyPayLimit() {
+        public double getFortnightPayLimit() {
 
             // number of fortnightly throghout the year
             int numberOfWeeks = 26;       

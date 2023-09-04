@@ -13,15 +13,7 @@
          */
         public static void main(String[] args) throws IOException {
                
-               
-              
                 UserCalculatorMenu menu_1 = new UserCalculatorMenu();
-                menu_1.userGreetings();
-                    
-                    
-            
-            
-            
-
+                menu_1.userGreetings();        
         }
     }

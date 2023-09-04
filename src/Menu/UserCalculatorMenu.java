@@ -22,7 +22,7 @@
 
             // getting current time to greeting the user
             GregorianCalendar time = new GregorianCalendar();
-            int hour = time.get(Calendar.HOUR_OF_DAY);         
+            int hour = time.get(Calendar.HOUR_OF_DAY);      
             
             // Main users MENU
             String userOption ="Please Choose: " + "\n"
@@ -34,7 +34,7 @@
                  System.out.println("Good Morning!" + "\n" + userOption);
                 }
 
-                else if (hour < HourOfTheDay.AFTERNOON.getHour() && !(hour == HourOfTheDay.AFTERNOON.getHour())){
+                else if (hour <= HourOfTheDay.AFTERNOON.getHour()){ // && (hour == HourOfTheDay.AFTERNOON.getHour())){
                 System.out.println("Good Afternoon" + "\n" + userOption);
                 }
 
@@ -48,10 +48,10 @@
 
                 // calling method to get users INT and initializing the return type to zero
                 Utilities getUserInput = new Utilities();
-
+                            
                 // get user input
                 selectedOption = getUserInput.getUserInt();
-
+                
                 if (selectedOption == 1){
                     String userMenu ="Welcome to your Tax Calculation! \n" 
                             + "\n" 
@@ -69,14 +69,13 @@
                     for (int type = 1; type <=Status.values().length; type++) {
                          System.out.println( type + ": " + Status.values()[type-1]);
                     }
-
+                    
                     // calling method to get users INT and initializing the return type to zero
                     int user = getUserInput.getUserInt();
 
                         // user option switch 
                         switch(user){
                             case 1:
-                               
                                 UserStatus single = new UserStatus();
                                 single.SinglePersonTax();
                                 break;
@@ -89,8 +88,10 @@
                             default:// do nothing  
                    }
             } 
+                
+                
             else if (selectedOption == 2){      
-                     System.out.println("You MUST Finish the Single Person calculation first");
+                     System.out.println("In order to proceed you must finish the TAX CALCULATION first!");
             }
         }
     }
