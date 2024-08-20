@@ -1,12 +1,12 @@
 
-package USER;
+package User;
 
 /**
  * @author FRANKLIN
  */
 public class Single extends User{
-    private double PAYEE;
-    private double PersonalTax;
+    private final double PAYEE;
+    private final double PersonalTax;
     
     public Single(){
           super(); // it calls the parent class attributes

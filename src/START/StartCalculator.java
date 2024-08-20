@@ -1,7 +1,7 @@
 
-package StartCalculator;
-import USER.Married;
-import USER.Single;
+package START;
+import User.Married;
+import User.Single;
 import java.io.IOException;
 
 
@@ -23,14 +23,16 @@ public class StartCalculator {
         Single  singlePerson = new  Single();
         singlePerson.setName(name);
         System.out.println("Single Person's Name: " + singlePerson.getName());
+        
         singlePerson.setTaxCreditsBalance(4000);
         singlePerson.taxCreditsWithdraw(5000);
-        
         System.out.println("Single Person's Tax Credits Balance: " + singlePerson.getTaxCredits());
         System.out.println("Single Person's toSTRING > Tax Credits Balance:" + singlePerson.toString());
-          
         System.out.println("------------------------------------------------------------");
-
+        System.out.println("djndd");
+        
+      
+                
         // TESTING MARRIED PERSON
         
         String marriedName = "Patricia";

@@ -1,4 +1,4 @@
-package Utilities;
+package Util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 

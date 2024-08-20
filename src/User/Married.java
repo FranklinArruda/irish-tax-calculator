@@ -1,5 +1,5 @@
 
-package USER;
+package User;
 
 /**
  *
@@ -7,8 +7,8 @@ package USER;
  */
 public class Married extends User{
 
-    private double PAYEE;
-    private double PersonalTax;
+    private final double PAYEE;
+    private final double PersonalTax;
     
     public Married(){
           super(); // it calls the parent class attributes
