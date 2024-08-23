@@ -1,5 +1,7 @@
 
 package START;
+import Taxes.Helper;
+import Taxes.TaxDeductions;
 import User.Married;
 import User.Single;
 import java.io.IOException;
@@ -45,6 +47,20 @@ public class StartCalculator {
         System.out.println("Maried Person's Tax Credits Balance: " + mariedPerson.getTaxCredits());
         System.out.println("Maried Person's toSTRING > Tax Credits Balance:" + mariedPerson.toString());
         
-              
+        TaxDeductions calculateTax = new TaxDeductions();
+        
+        
+        // ==================== TESTING 'PRSI + USC' ==================================
+        System.out.println("----------------------------------\n");
+        double PRSIsalry = 450.00;
+        double PRSIRESULTS = calculateTax.getPRSI(PRSIsalry);
+        
+        Helper getMath = new Helper();
+        System.out.println("PRSI RESULTS MAIN: " + getMath.roundToTwoDecimalPlaces(PRSIRESULTS));
+        
+        System.out.println("--------------------------------------\n");
+        double USCRESULTS = calculateTax.getUSC(690, 11100);
+        System.out.println("USC RESULTS MAIN: " + getMath.roundToTwoDecimalPlaces(USCRESULTS));
+        
     }
 }

@@ -16,20 +16,26 @@ public interface TaxDeductionsInterface {
     public double getPRSI(double salary);
     
     /**
-     * Universal Social Charge (USC_Income_Bands)
-     * Use Utilities class to get user input and validate it 
-     * It calculates (USC Income Bands) Based on the user input
+     * If your annual income is less than €13,000, you do not pay USC.
+     * 
+     * If your annual income exceeds €13,000, USC is applied to your entire income, 
+     * in real time based on your current pay period, but at different rates depending on 
+     * the portion of your income that falls within each band.
+     * 
+     * If YTD income for the year is up to 12.012,01 ( taxed at 0.5% )
+     * If YTD income for the year is in between 12.012,01 and 25.760,00 ( taxed at 2% )
+     * If YTD income for the year is in between 25.760,00 and 70.000,00 ( taxed at 4% )
+     * If YTD income for the year is greater than 70.000,00 ( taxed at 8%)
      * 
      * Enums OBJECTS to get USC Rate bands as well as USC percentage deduction
-     * If gross income for the year is up to 12.012,01 ( taxed at 0.5% )
-     * If gross income for the year is above 12.000,01 ( taxed at 2% )
-     * If gross income for the year is in between 22,9920.01 and 70,044,00 ( taxed at 4.5% )
      * 
-     * @param salary to assign the result from the main
-     * @param companyName
-     * @return USC_Income_Bands results
+     * @param YearToDateIncome user enter their YTD(Year-to-Date) income which is cumulative income.
+     * @param userSalary is the salary for the current period.
+     * @return USC applied upon the cumulative income that falls within the range of rates, 
+     * then applied to current user pay directly.
+     * 
      */
-    public double getUSC(double salary, String companyName);
+    public double getUSC(double userSalary, double YearToDateIncome);
     
     /**
      * PENSION SCHEME:
