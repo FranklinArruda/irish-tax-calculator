@@ -1,12 +1,11 @@
-
 package Enums;
+
 /**
- *
- * @author STUDENT
+ * @author FRANKLIN
  */
 public class EnumTaxContainer {
     
-//===========  USC  ====================
+    //===========  USC  ====================
     public enum USCThresHold {
        RATE1(12012, 0.5), 
        RATE2(25760, 2.0), // 12012 + 13748 = 25760 at 2% (Usc Applied between 12012 and 25760)
@@ -32,23 +31,34 @@ public class EnumTaxContainer {
     
     //===========  PRSI  ====================
     public enum PRSIRates {
-       RATE1(352.00), 
-       RATE2(424.00); 
+        RATE1(352.00), 
+        RATE2(424.00); 
        
-      public final double rates;
+         public final double rates;
       
-      PRSIRates(double rates){
-      this.rates = rates;    
-      }
+         PRSIRates(double rates){
+             this.rates = rates;    
+        }
       
-      public double getPRSIRate(){
-      return this.rates;
-      }
-    
+        public double getPRSIRate(){
+        return this.rates;
+        }
     } 
-       
+    
+    
+    //=======  TAX RATES 20% & 40%  =======
+    public enum TaxRates{
+        REGULAR_TAX(20),
+        EMERGENCY_TAX(40);
 
-       
-       
- 
+        final int  tax;  
+
+        TaxRates(int tax){
+             this.tax = tax;
+        }
+
+        public int getTaxRate(){
+        return this.tax;
+        }      
+    }
 }

@@ -20,7 +20,7 @@ import java.io.InputStreamReader;
      * @return - the users input as a String
      * If user does not enter text, output an error and ask them again
      */
-     public String getUserText (String prompt){
+     public String getUserText (){
 
         BufferedReader myKeyboard = new BufferedReader(new InputStreamReader(System.in));
 
@@ -31,7 +31,6 @@ import java.io.InputStreamReader;
             do{  
                try {
 
-                System.out.println(prompt); 
                 userInput = myKeyboard.readLine().trim();
 
                  // space between letter 'Z' and square brackets ']' in case the user types two words   

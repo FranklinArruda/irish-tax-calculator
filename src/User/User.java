@@ -1,8 +1,7 @@
 package User;
 
 /**
- *
- * @author STUDENT
+ * @author FRANKLIN
  */
 public abstract class User {
     

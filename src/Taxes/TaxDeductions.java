@@ -2,7 +2,7 @@
 package Taxes;
 import Enums.EnumTaxContainer.PRSIRates;
 import Enums.EnumTaxContainer.USCThresHold;
-
+import Utilities.Utilities;
 /**
  *
  * @author FRANKLIN
@@ -14,7 +14,6 @@ public class TaxDeductions implements TaxDeductionsInterface{
     
         // imports Helper class to process the rates
         Helper getMath = new Helper();
-        
         
         int ONE_SIXTH_DIVISOR = 6;
         int PRSI_credits = 12;
@@ -162,9 +161,81 @@ public class TaxDeductions implements TaxDeductionsInterface{
 }
     @Override
     public double getPension(double salary) {
-        return 0.0;
+        
+        // imports heper class to apply rate;
+        Helper applyRateToPension = new Helper();
+        
+        // import utilities
+        Utilities getUserInput = new Utilities();
+       
+        double pensionResults = 0; // initialized to zero
+        String userChoice = ""; // Validate with if / else
+
+        boolean userPension = false; // It must be greater than zero (validate int)
+        boolean valid = false; // Validate String
+        
+        do{  
+            try {
+                // get user TEXT
+                userChoice =  getUserInput.getUserText().toUpperCase().trim();
+
+                // space between letter 'Z' and square brackets ']' in case the user types two words   
+                if(!userChoice.matches("[a-zA-Z ]+") && (!userChoice.equals("Y")) && (!userChoice.equals("N"))){
+                    System.err.println("Only Letters Allowed. Please try again!");
+                    valid = false;
+                }
+                // if user enters ( Y )
+                else if (userChoice.equals("Y")){
+
+                    // ANOTHER do while within if statement
+                    do{
+                        try{
+                            System.out.println("What percentage are you paying on your Pension Scheme?");
+
+                            // get user double input (call method from utilities class)
+                            pensionResults = getUserInput.getUserDouble();
+
+
+                            //check that the value is allowed by checking range
+                            // if user input notgreater than zero will keep reapeating until goes throug
+                            if (pensionResults <=0){
+                                System.err.println("Invalid value entered. Please enter a number greater than ZERO");
+                                userPension=false;
+                             } 
+
+                            // must be OK
+                            // it calculates the salary against percentage and user input
+                            // stores the results in (Pension Results)
+                            else {   
+                                // call method apply rates 
+                                pensionResults = applyRateToPension.applyRate(salary, pensionResults);
+                                userPension = true;
+                             }
+                        }catch(Exception e){
+                            // this will be if the parseInt threw an error -- so the user did not enter a number
+                            System.err.println("Only Numbers. Please try again!");  
+                        } 
+                    }while ((!userPension));
+                        valid=true; // MUST be ok
+                    }
+                     
+                    // if user enters ( N )
+                    else if (userChoice.equals("N")){
+                            System.out.println("No pension contribution for this period");
+                            valid=true;
+                    }
+                    
+                    // if user enters neither N or Y
+                    else if (!valid){
+                            System.err.println("Only  Y (YES) or  N (NO) allowed. Please try Again!");
+                            valid=false;
+                    }
+                     
+            }catch(Exception e){
+                // this will be if the parseInt threw an error -- so the user did not enter a number   
+                System.err.println("Something went Wrong. Please try Again!");  
+            }
+        }while (!valid);    
+     return pensionResults;
     }
-    
-    
-    
 }
